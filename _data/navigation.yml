@@ -1,9 +1,11 @@
 # Header navigation (top menu) - rendered in the listed order.
+# The homepage now shows the post list, so no separate Blog entry is needed.
+# blog.md still exists as a full unpaginated archive at /blog/ - re-add it:
+#   - title: Archive
+#     url: /blog/
 header:
   - title: Home
     url: /
-  - title: Blog
-    url: /blog/
   - title: Fiction
     url: /fiction/
   - title: Downloads

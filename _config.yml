@@ -18,7 +18,7 @@ timezone: America/Argentina/Buenos_Aires
 
 author:
   type: person
-  name: Igor Anikeev
+  name: Your Name
 
 # --- Blog pagination (classic jekyll-paginate, works at site root) ---
 paginate: 8
