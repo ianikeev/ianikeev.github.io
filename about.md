@@ -1,7 +1,7 @@
 ---
 layout: page
 title: About
-permalink: /about.html
+permalink: /about/
 ---
 
 Two lads, one cat, and a shared writing habit. This site collects our
