@@ -1,3 +1,76 @@
 /* start custom scss snippet */
 
+// The header mark (_includes/svg/logo.svg) uses fill: currentColor. It sits
+// beside the brand link rather than inside it, so it does not inherit the link
+// colour and needs its own rule. The dark-header rule is NOT redundant: without
+// it the base rule below would force navy on the navy header.
+.header__brand > svg {
+  color: $header-text-color;
+  // The theme sizes this from 1.6 x font-size-h4 (~30px), which is too tight
+  // for the traced linework - the clove lines blur away. The header bar is 5rem
+  // tall, so there is room for 36px.
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.header--dark .header__brand > svg {
+  color: $text-color-theme-dark;
+}
+
+// Landing page sections, used by index.md.
+// Imported last in assets/css/main.scss, so theme variables are in scope.
+
+.landing-intro,
+.landing-posts {
+  margin-top: map-get($spacers, 5);
+  margin-bottom: map-get($spacers, 5);
+}
+
+.landing-intro {
+  padding: map-get($spacers, 4);
+  border-left: 4px solid $main-color-1;
+  border-radius: map-get($base, border-radius);
+  background: $main-color-3;
+
+  h2 {
+    margin-top: 0;
+  }
+
+  ul {
+    margin-bottom: 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  @include media-breakpoint-down(md) {
+    padding: map-get($spacers, 3);
+  }
+}
+
+.landing-eyebrow {
+  margin-bottom: map-get($spacers, 1);
+  color: $main-color-1;
+  font-size: map-get($base, font-size-sm);
+  font-weight: map-get($base, font-weight-bold);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.landing-posts {
+  h2 {
+    margin-top: 0;
+  }
+}
+
+.landing-elsewhere {
+  margin: map-get($spacers, 5) 0;
+  padding-top: map-get($spacers, 3);
+  border-top: 1px solid $border-color-l;
+  color: $text-color-l;
+  font-size: map-get($base, font-size-sm);
+  text-align: center;
+}
+
 /* end custom scss snippet */

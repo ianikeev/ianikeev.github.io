@@ -1,16 +1,15 @@
 # Header navigation (top menu) - rendered in the listed order.
+# "Home" is not listed: the site title in the header links to "/".
 # Both shapes are supported by the theme's header.html:
 #   - title: Home            (plain string)
 #   - titles: {en: Home}     (locale map)
 header:
-  - title: Home
-    url: /
   - title: Blog
     url: /blog/
+  - title: Building
+    url: /building/
   - title: Fiction
     url: /fiction/
-  - title: Downloads
-    url: /downloads/
   - title: About
     url: /about/
 

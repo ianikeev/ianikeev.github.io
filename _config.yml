@@ -1,19 +1,20 @@
 # ============================================================
 # twoladsandacat.com - adapted from the TeXt theme's canonical
 # root configuration (theme master). All theme keys are present;
-# only site identity, the fiction collection, and pagination
-# were changed from the defaults.
+# site identity, the app block, the fiction collection and the
+# skin were changed from the defaults.
 # ============================================================
 
 ## => Site Settings
 ##############################
-text_skin: default # "default" (default), "dark", "forest", "ocean", "chocolate", "orange"
+text_skin: clinic # "default", "dark", "forest", "ocean", "chocolate", "orange", or a custom skin in _sass/skins/
 highlight_theme: default # "default" (default), "tomorrow", "tomorrow-night", ...
 url     : https://twoladsandacat.com
 baseurl : # does not include hostname
 title   : Two Lads and a Cat
 description: > #
-  Stories, blog posts, and downloads from two lads and one cat.
+  Building a medical information manager in the open - a build log,
+  plus whatever else catches my attention.
 
 ## => Language and Timezone
 ##############################
@@ -24,11 +25,20 @@ timezone: America/Argentina/Buenos_Aires
 ##############################
 author:
   type      : person # "person" (default), "organization"
-  name      : Two Lads and a Cat
+  name      : Igor Anikeev
   url       :
-  avatar    : # path or url of avatar image (square)
-  bio       : Two lads, one cat, and a shared writing habit.
+  avatar    : # path or url of avatar image (square) - a photo here warms up the landing page
+  bio       : Building a medical information manager in the open.
   email     :
+
+## => The App
+##############################
+## The app's name and status. Read as `site.app.name` / `site.app.status`
+## on the landing page, /building/ and /about/ - change them here only.
+app:
+  name     : Niori
+  one_liner: A home for your own medical history.
+  status   : Early days - design and prototypes. Nothing to download yet.
 
 ## => GitHub Repository (optional - used for "edit on GitHub" links)
 ##############################
@@ -49,7 +59,8 @@ paths:
 excerpt_separator: <!--more-->
 
 ## license
-license: CC-BY-NC-4.0 # "CC-BY-4.0", "CC-BY-SA-4.0", "CC-BY-NC-4.0", "CC-BY-ND-4.0"
+license: CC-BY-NC-SA-4.0 # "CC-BY-4.0", "CC-BY-SA-4.0", "CC-BY-NC-4.0", "CC-BY-NC-SA-4.0", "CC-BY-ND-4.0"
+# Keys must exist in _data/licenses.yml - an unknown key renders no license block.
 
 ## TOC
 toc:
@@ -103,6 +114,17 @@ exclude:
   - /vendor
   - /docs
   - /test
+  - bin/ # icon/asset build scripts, not site content
+
+## => Collections
+##############################
+## _fiction/ must be declared here or it is ignored entirely (the
+## `defaults` block below has nothing to apply to, site.fiction is nil
+## and /fiction/ renders empty). URLs become /fiction/<file-name>/.
+collections:
+  fiction:
+    output: true
+    permalink: /fiction/:path/ # without this the global `permalink: date` applies
 
 defaults:
   - scope:
