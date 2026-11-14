@@ -6,7 +6,7 @@ permalink: /about/
 
 {% include article/footer/author-profile.html author=site.author %}
 
-I'm Igor Anikeev. I'm building **{{ site.app.name }}**, a personal medical
+Hello, I'm Igor. I'm building **{{ site.app.name }}**, a personal medical
 information manager, and writing about the process in public — the decisions,
 the dead ends, and the parts I get wrong.
 
