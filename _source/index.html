@@ -1,0 +1,56 @@
+---
+layout: base.html
+title: Building in the open
+description: >-
+  A medical information manager, built in public — decisions, dead ends,
+  and the occasional tangent.
+permalink: /
+---
+<main class="grid">
+<section class="landing-intro">
+  <p class="landing-eyebrow">The project</p>
+  <h2>{{ app.name }} — {{ app.one_liner }}</h2>
+  <p>
+    Medical information ends up scattered across PDFs, patient portals, emails
+    and memory. I'm building one place where a person's own medical history
+    lives together — and writing down every decision as I go, including the
+    ones I get wrong.
+  </p>
+  <ul>
+    <li><strong>The problem</strong> — your records belong to clinics, portals
+      and inboxes, not to you.</li>
+    <li><strong>Where it is</strong> — {{ app.status }}</li>
+    <li><strong>How to follow</strong> — the <a href="/blog/">build log</a>,
+      plus the occasional <a href="/fiction/">story</a>.</li>
+  </ul>
+  <p><a href="/building/">More on what I'm building →</a></p>
+</section>
+
+<section class="landing-posts">
+  <h2>Latest from the build log</h2>
+
+  {% assign recent = collections.posts | slice: 0, 3 %}
+  {% if recent.size > 0 %}
+    <ul>
+      {% for post in recent %}
+        <li>
+          <time datetime="{{ post.date | date: '%Y-%m-%d' }}">
+            {{ post.date | date: '%b %d, %Y' }}
+          </time>
+          <a href="{{ post.url }}">{{ post.data.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Nothing published yet — the first post is coming soon.</p>
+  {% endif %}
+
+  <p><a href="/blog/">All posts →</a></p>
+</section>
+
+<p class="landing-elsewhere">
+  Also here: <a href="/fiction/">Fiction</a> ·
+  <a href="/archive.html">Archive</a> ·
+  <a href="/about/">About</a>
+</p>
+</main>

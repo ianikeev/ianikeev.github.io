@@ -1,7 +1,6 @@
-_site/
-.jekyll-cache/
-.sass-cache/
-vendor/
-Gemfile.lock
-*.gem
 .DS_Store
+
+# Eleventy / Grease
+node_modules/
+_public/
+.cache/

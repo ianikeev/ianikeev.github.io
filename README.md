@@ -1,123 +1,165 @@
-# twoladsandacat.com - site skeleton (Jekyll + TeXt theme, self-contained)
+# twoladsandacat.com
 
-This repository is a COMPLETE, ready-to-run Jekyll site: the full TeXt
-theme (layouts, includes, styles, data) is committed here, so it builds
-locally with plain `bundle exec jekyll serve` and on GitHub Pages
-without `remote_theme` or theme-gem whitelisting.
+The source repository for [Two Lads and a Cat](https://twoladsandacat.com), a personal website about building Niori — a medical information manager — in the open, alongside fiction and other writing.
 
-## What is inside
+The site is built with [Eleventy](https://www.11ty.dev/) and [Grease](https://github.com/adamstddrd/grease), a lightweight starter with a responsive design, light and dark modes, and selectable themes.
+
+## Requirements
+
+- Node.js 24
+- npm
+- Emacs (required for publishing Org-mode files)
+
+The Org integration uses Emacs' built-in HTML exporter in batch mode. It runs during the Eleventy build; no Emacs packages or personal configuration are required.
+
+## Getting started
+
+Install dependencies:
+
+```bash
+npm ci
+```
+
+Start the local development server:
+
+```bash
+npm run start
+```
+
+Eleventy serves the site locally and watches for changes.
+
+## Building
+
+Build the production site:
+
+```bash
+npm run publish:prod
+```
+
+The generated site is written to `_public/`.
+
+For a staging build:
+
+```bash
+npm run publish:stage
+```
+
+## Content
+
+All site content lives in `_source/`.
 
 | Path | Purpose |
-|------|---------|
-| `_layouts/`, `_includes/`, `_sass/`, `assets/`, `_data/` | The TeXt theme runtime files (untouched except `_data/navigation.yml`, `_data/licenses.yml`, `_includes/head/favicon.html`, `_includes/svg/logo.svg` and `_sass/custom.scss`). |
-| `_sass/skins/_clinic.scss` | Custom "clinic" skin (calm teal/navy), activated by `text_skin: clinic`. |
-| `index.md` | Landing page — dark hero, "the project" panel, latest 3 posts, quiet links to the rest. |
-| `building.md` | `/building/` — what the app is, its constraints, and its status. |
-| `blog.md` | Blog listing at `/blog/` - all posts via the `articles` layout. |
-| `fiction.md` | Fiction index at `/fiction/` - card grid of everything in `_fiction/`. |
-| `_fiction/` | Stories; each file becomes `/fiction/<file-name>/` (layout + sidebar from `_config.yml` defaults). |
-| `_posts/` | Blog posts, `YYYY-MM-DD-title.md`; the `article` layout comes from defaults. |
-| `downloads/index.md` | Downloads placeholder at `/downloads/` (not in the nav until there is a file). |
-| `about.md` | About page at `/about/`. |
-| `404.html`, `archive.html` | Error page and date archive (theme layouts). |
-| `_config.yml` | Site settings adapted from the theme's canonical config. |
-| `assets/images/logo/niori_icon.png` | **Source artwork** for the site mark (line art). Everything else in the icon set is generated from it. |
-| `assets/images/logo/niori-tab.svg` | Generated filled silhouette of that artwork — the tab-icon master. |
-| `bin/trace-silhouette.py` | Derives the silhouette + header mark from the artwork. Not published (in `exclude:`). |
-| `bin/render-icons.sh` | Renders every favicon/app icon from the silhouette and the artwork. Not published (in `exclude:`). |
-| `Gemfile` | jekyll + feed/sitemap/paginate/jemoji + webrick (needed by `jekyll serve` on Ruby 3+). |
-
-## Icons
-
-Everything comes from **one piece of artwork**, but it cannot be used as-is at
-both ends of the size range. Measured on this artwork: at 44px the linework is
-fully legible, at 16px it collapses into an unreadable blob. So
-`bin/trace-silhouette.py` derives two vector marks from it, and
-`bin/render-icons.sh` renders the raster set.
-
-| File | Role |
 |---|---|
-| `assets/images/logo/niori_icon.png` | **Source artwork** (line art). The only file to replace. |
-| `_includes/svg/logo.svg` | *Generated* — the **full linework**, inline, `fill: currentColor`. Renders at ~44px in the header, where the detail reads. |
-| `assets/images/logo/niori-tab.svg` | *Generated* — the outline with its **own clove seams carved out**, widened to a fixed share of the icon. Drives 16/32 PNGs, `favicon.ico`, `favicon.svg`, `safari-pinned-tab.svg`. |
-| `assets/apple-touch-icon.png`, `android-chrome-*`, `mstile-*` | *Generated* tiles from the raw artwork, opaque navy with a light glyph. |
+| `_source/index.html` | Homepage |
+| `_source/about.md` | About page |
+| `_source/building.md` | Niori project overview |
+| `_source/blog.html` | Blog listing |
+| `_source/posts/` | Blog posts |
+| `_source/fiction.html` | Fiction listing |
+| `_source/fiction/` | Fiction and stories |
+| `_source/downloads/` | Downloads page |
+| `_source/archive.html` | Post archive |
+| `_source/_data/` | Site configuration and navigation data |
+| `_source/_layouts/` | Page layouts |
+| `_source/_includes/` | Reusable template components |
+| `_source/assets/` | CSS, JavaScript, images and fonts |
+| `_source/_utilities/` | Build-time utilities, including the Org exporter |
 
-After replacing the artwork, run both steps:
+### Adding a post
 
-```bash
-./bin/trace-silhouette.py    # artwork -> header linework + seamed tab mark
-./bin/render-icons.sh        # seamed mark + artwork -> 13 icon files
+Create a Markdown file in `_source/posts/`, using the date in its filename:
+
+```text
+_source/posts/YYYY-MM-DD-title.md
 ```
 
-`render-icons.sh` needs inkscape and ImageMagick 7; `trace-silhouette.py` needs
-only ImageMagick. Tab icons come out transparent teal, tiles opaque navy, and
-`safari-pinned-tab.svg` flat black because Safari recolours it itself. All
-output is committed, so **the build never needs either tool** and GitHub Pages
-never runs them.
+For example:
 
-Why the seams are *carved* rather than drawn: a 16px icon has room for roughly
-1px of gap, so the drawing's own strokes have to be widened to a fixed share of
-the icon — widening all of them at once swallows the bulb. Only the strongest
-few interior strokes are kept as seams (found by clustering the artwork's
-interior stroke positions), which leaves 2–3 cloves visible at 16px.
+```markdown
+---
+layout: post.html
+title: My new post
+date: 2026-11-20 09:00:00
+categories: notes
+tags: [example]
+---
 
-The artwork must be **dark ink on a light or transparent background**: the tab
-seams are found from the dark strokes, and the tiles invert luminance (which is
-what turns dark strokes into a light glyph on navy).
+The post content goes here.
 
-Knobs: `TEAL` / `NAVY` / `FAVICON_PCT` / `GLYPH_PCT` in `render-icons.sh`, and
-`SEAM_PCT` (seam width) / `SEAM_KEEP` (how many seams) / `SEAM_SEP_PCT`
-(minimum spacing) / `EPSILON`+`MIN_AREA` (tab mark) / `EPSILON_DETAIL`+
-`MIN_AREA_DETAIL` (inline linework weight) / `BOX` / `THRESHOLD` in
-`trace-silhouette.py`.
+<!--more-->
 
-The header mark is drawn at 36px (`_sass/custom.scss`) rather than the theme's
-~30px, because the traced clove lines need the extra room to read.
-
-## Run locally
-
-```bash
-bundle install
-bundle exec jekyll serve
-# open http://localhost:4000
+The rest of the post goes here.
 ```
 
-## Publish
+The `<!--more-->` marker separates the introductory excerpt from the full content in the Atom feed.
 
-Commit everything (including `_layouts/` and friends) and push to the
-repository that GitHub Pages serves. No `remote_theme` line is needed
-or wanted in `_config.yml`.
+Post permalinks are generated from the category, date and filename, preserving the existing Jekyll URL structure.
 
-## Extend
+### Adding fiction
 
-- New story: add `my-story.md` to `_fiction/`; add a child entry under
-  `fiction:` in `_data/navigation.yml` so it appears in the sidebar.
-- New post: add `YYYY-MM-DD-title.md` to `_posts/` (date must be in
-  the past). It shows up on `/blog/` and in the latest-posts list on
-  the landing page automatically.
-- **App name: `app.name` in `_config.yml`** (currently `Niori`).
-  It appears on `/`, `/building/` and `/about/`; change that one line
-  and all three follow.
-- **Content licence: `license` in `_config.yml`** (currently
-  `CC-BY-NC-SA-4.0`), shown in each post's footer. The key must exist
-  in `_data/licenses.yml` or the block silently renders nothing —
-  add an entry there for any licence not already listed.
-- Downloads: drop files in `assets/downloads/`, link them from
-  `downloads/index.md`, and add it back to `_data/navigation.yml`.
-- Hero background image: add `background_image: { src: /assets/img/... }`
-  under `article_header:` in `index.md`.
-- Branding: the header mark is `_includes/svg/logo.svg`, generated from the
-  artwork by `bin/trace-silhouette.py` and drawn with `fill: currentColor`,
-  so `_sass/custom.scss` sets its colour per header theme — it flips to white
-  on dark headers automatically. Re-run the script rather than editing it.
-- Accent colours live in `_sass/skins/_clinic.scss`. `_sass/custom.scss`
-  is imported last, so it can restyle selectors but cannot redefine
-  `$main-color-1` and friends — add a skin instead.
+Create a Markdown file in `_source/fiction/`:
 
-## Rules that keep this site building
+```markdown
+---
+layout: fiction.html
+title: My story
+key: my-story
+permalink: /fiction/my-story/
+---
 
-1. Never set a `layout:` name that is not one of: 404, archive, article,
-   articles, base, home, landing, none, page (see `_layouts/`).
-2. Keep page bodies empty unless there is real content - everything
-   below the front matter renders on the page.
-3. Keep post dates in the past; Jekyll skips future-dated posts.
+The story goes here.
+```
+
+The fiction listing is generated from the fiction collection.
+
+### Writing in Org mode
+
+Org files are supported as a native content format. Add an `.org` file under `_source/` and use normal Eleventy front matter for its metadata and layout.
+
+The build invokes Emacs in batch mode to export Org content to HTML. Org export options can be set using normal Org directives, such as `#+OPTIONS:`.
+
+## Site configuration
+
+Site-wide data is kept in `_source/_data/`.
+
+- `site.json` — site title and description.
+- `app.json` — Niori's name, description and current status.
+- `navigation.json` — header navigation.
+- `modes.json` — available display modes.
+- `themes.json` — available Grease themes.
+
+The global Eleventy configuration, including collections, permalink handling and the Org extension, is in `eleventy.config.js`.
+
+## Assets and icons
+
+Static assets are stored in `_source/assets/`. The site uses a custom Niori icon, with PNG and ICO versions.
+
+The root-level `CNAME` is copied into the Eleventy source as `_source/CNAME` and published to preserve the custom domain.
+
+The web app manifest is `_source/site.webmanifest`.
+
+## Feeds and discovery
+
+The site generates:
+
+- `/feed.xml` — Atom feed.
+- `/sitemap.xml` — XML sitemap.
+- `/404.html` — custom not-found page.
+
+The sitemap excludes pages marked `noindex`, including the documentation and kitchen-sink demo pages.
+
+## Publishing
+
+GitHub Actions builds and deploys the site to GitHub Pages.
+
+The workflow is `.github/workflows/deploy.yml`.
+
+It runs when changes are pushed to `main`, or when manually triggered from the Actions tab. The workflow installs Node.js and Emacs, runs `npm ci`, builds the production site and deploys `_public/`.
+
+The custom domain is configured through the published `CNAME` file.
+
+## Licences
+
+The website's original software licence is MIT. Third-party notices for the Grease starter are recorded in `THIRD-PARTY-NOTICES.md`.
+
+Blog posts are published under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International licence (CC BY-NC-SA 4.0).

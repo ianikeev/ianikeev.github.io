@@ -1,0 +1,47 @@
+---
+layout: base.html
+---
+
+<main class="grid">
+  <article itemscope itemtype="https://schema.org/BlogPosting">
+    <header>
+      <h1 itemprop="headline">{{ title }}</h1>
+
+      <p class="item__meta">
+        <time
+          itemprop="datePublished"
+          datetime="{{ page.date | date: '%Y-%m-%dT%H:%M:%S', 'UTC' }}Z"
+        >{{ page.date | date: "%B %d, %Y" }}</time>
+      </p>
+      <meta itemprop="dateModified" content="{{ page.date | date: '%Y-%m-%dT%H:%M:%S', 'UTC' }}Z">
+    </header>
+
+    <div class="article__content" itemprop="articleBody">
+      {{ content }}
+    </div>
+
+    <footer>
+  {% if tags.size > 0 %}
+    <ul class="unlisted inline-flex gap-xs">
+      {% for tag in tags %}
+        <li><a href="/archive.html?tag={{ tag | url_encode }}">{{ tag }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <p>
+    <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+      <img
+        alt="Creative Commons License"
+        src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
+      >
+    </a>
+    <br>
+    This work is licensed under a
+    <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+      Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+    </a>.
+  </p>
+</footer>
+  </article>
+</main>
