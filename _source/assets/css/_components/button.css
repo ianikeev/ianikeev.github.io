@@ -9,7 +9,7 @@
 	padding-block: var(--space-xs);
 	padding-inline: var(--space-sm);
 	font-size: inherit;
-	font-family: inherit;
+	font-family: var(--font-family-interface);
 	text-decoration: none;
 	line-height: var(--line-height-sm);
 	text-box: trim-both cap alphabetic;

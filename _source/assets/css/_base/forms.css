@@ -21,7 +21,7 @@ textarea {
 
 :where(button, input, select, option, textarea) {
 	color: var(--color-text);
-	font-family: inherit;
+	font-family: var(--font-family-interface);
 	font-size: inherit;
 	font-weight: inherit;
 	line-height: var(--line-height-sm);

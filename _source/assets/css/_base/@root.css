@@ -67,10 +67,10 @@
   --------------------------------------------------------------------------- */
 
 	/* font stacks */
-	--font-family-main:
-		system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", arial, sans-serif;
-	--font-family-code:
-		ui-monospace, menlo, monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+	--font-family-main: "Erewhon", Georgia, serif;
+	--font-family-heading: "IBM Plex Sans", system-ui, sans-serif;
+	--font-family-interface: var(--font-family-heading);
+	--font-family-code: "Inconsolata", ui-monospace, monospace;
 
 	/* font properties */
 	--font-weight-xs: 200;
