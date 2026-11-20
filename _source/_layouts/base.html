@@ -75,10 +75,8 @@
   </head>
 
     <body {% if class %} class="{{ class }}"{% endif %}>
-    {% unless page.url == "/docs/" or page.url == "/kitchen-sink/" %}
-    	{% render "site-header.html", navigation: navigation, modes: modes, themes: themes, page: page %}
-    {% endunless %}
 
+{% render "site-header.html", navigation: navigation, modes: modes, themes: themes, page: page %}
     {{ content }}
   </body>
 

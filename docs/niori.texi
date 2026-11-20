@@ -1,0 +1,71 @@
+\input texinfo
+@documentencoding UTF-8
+@documentlanguage en
+@setfilename niori.info
+@settitle Niori Manual
+
+@copying
+Copyright @copyright{} 2026 Igor Anikeev.
+
+This manual documents Niori, a medical information manager.
+@end copying
+
+@titlepage
+@title Niori
+@subtitle Manual
+@author Igor Anikeev
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@node Top
+@top Niori
+
+Niori is a medical information manager. This manual documents its
+installation, configuration, features and operation.
+
+@insertcopying
+
+@menu
+* Overview::
+* Installation::
+* Using Niori::
+* Configuration::
+* Data and Privacy::
+* Troubleshooting::
+@end menu
+
+@node Overview
+@chapter Overview
+
+This chapter introduces Niori, its purpose and its main concepts.
+
+@node Installation
+@chapter Installation
+
+This chapter describes how to obtain, install and run Niori.
+
+@node Using Niori
+@chapter Using Niori
+
+This chapter explains the application's features and workflows.
+
+@node Configuration
+@chapter Configuration
+
+This chapter documents application settings and configuration files.
+
+@node Data and Privacy
+@chapter Data and Privacy
+
+This chapter describes how Niori stores and handles information.
+
+@node Troubleshooting
+@chapter Troubleshooting
+
+This chapter covers common problems and their solutions.
+
+@bye

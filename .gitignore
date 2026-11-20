@@ -4,3 +4,7 @@
 node_modules/
 _public/
 .cache/
+
+# Generated Niori documentation
+docs/build/
+_source/_includes/niori-manual.html

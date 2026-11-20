@@ -1,8 +1,24 @@
 {
   "header": [
-    { "title": "Blog", "url": "/blog/" },
-    { "title": "Building", "url": "/building/" },
-    { "title": "Fiction", "url": "/fiction/" },
-    { "title": "About", "url": "/about/" }
+    {
+      "title": "Blog",
+      "url": "/blog/"
+    },
+    {
+      "title": "Building",
+      "url": "/building/"
+    },
+    {
+      "title": "Documentation",
+      "url": "/docs/"
+    },
+    {
+      "title": "Fiction",
+      "url": "/fiction/"
+    },
+    {
+      "title": "About",
+      "url": "/about/"
+    }
   ]
 }

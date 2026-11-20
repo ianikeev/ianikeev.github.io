@@ -167,3 +167,24 @@ code {
 		margin-block-start: var(--space-sm);
 	}
 }
+
+/* Texinfo heading permalinks */
+.niori-manual .copiable-link {
+        margin-inline-start: 0.25em;
+        font-size: 0.45em;
+        vertical-align: super;
+        text-decoration: none;
+        opacity: 0.4;
+        transition: opacity 0.1s ease;
+}
+
+/* Texinfo table of contents */
+.niori-manual .region-contents ul {
+        padding-inline-start: 1.75ch;
+        list-style-type: decimal;
+}
+
+.niori-manual :is(h1, h2, h3, h4, h5, h6):hover .copiable-link,
+.niori-manual .copiable-link:focus-visible {
+        opacity: 1;
+}

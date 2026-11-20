@@ -1,24 +1,25 @@
 {
-	"name": "grease",
-	"version": "3.0.0",
-	"private": true,
-	"type": "module",
-	"devDependencies": {
-		"@11ty/eleventy": "^3.1.5",
-		"@11ty/eleventy-img": "^7.0.0",
-		"@biomejs/biome": "^2.4.15",
-		"esbuild": "^0.28.0",
-		"lightningcss": "^1.32.0"
-	},
-	"scripts": {
-		"start": "eleventy --serve --incremental --quiet",
-		"publish:stage": "ELEVENTY_ENV=stage eleventy",
-		"publish:prod": "ELEVENTY_ENV=prod eleventy",
-		"format": "biome format --write ./_source",
-		"lint": "biome lint --write ./_source",
-		"check": "biome check --write ./_source"
-	},
-	"allowScripts": {
-		"esbuild@0.28.1": true
-	}
+  "name": "grease",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.5",
+    "@11ty/eleventy-img": "^7.0.0",
+    "@biomejs/biome": "^2.4.15",
+    "esbuild": "^0.28.0",
+    "lightningcss": "^1.32.0"
+  },
+  "scripts": {
+    "docs:build": "node scripts/build-docs.js",
+    "start": "npm run docs:build && eleventy --serve --incremental --quiet",
+    "publish:stage": "npm run docs:build && ELEVENTY_ENV=stage eleventy",
+    "publish:prod": "npm run docs:build && ELEVENTY_ENV=prod eleventy",
+    "format": "biome format --write ./_source",
+    "lint": "biome lint --write ./_source",
+    "check": "biome check --write ./_source"
+  },
+  "allowScripts": {
+    "esbuild@0.28.1": true
+  }
 }

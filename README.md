@@ -9,8 +9,9 @@ The site is built with [Eleventy](https://www.11ty.dev/) and [Grease](https://gi
 - Node.js 24
 - npm
 - Emacs (required for publishing Org-mode files)
+- GNU Texinfo (required for building the Niori manual)
 
-The Org integration uses Emacs' built-in HTML exporter in batch mode. It runs during the Eleventy build; no Emacs packages or personal configuration are required.
+The Org integration uses Emacs' built-in HTML exporter in batch mode. It runs during the Eleventy build; no Emacs packages or personal configuration are required. The Niori manual uses GNU Texinfo to generate website HTML and an Emacs Info manual.
 
 ## Getting started
 
@@ -130,6 +131,33 @@ Site-wide data is kept in `_source/_data/`.
 
 The global Eleventy configuration, including collections, permalink handling and the Org extension, is in `eleventy.config.js`.
 
+## Grease and frontend architecture
+
+The site uses [Grease](https://github.com/adamstddrd/grease) as its frontend
+starter. The project is customized locally; the website does not depend on
+a remotely hosted Grease runtime.
+
+The CSS is organized around cascade layers for foundational styles,
+components and utilities. Components use compact BEM-like class conventions,
+while layout utilities provide grid and flexbox composition. Custom media
+queries define the responsive breakpoints.
+
+Typography uses a fluid type scale and locally hosted fonts:
+
+- Erewhon for body text.
+- IBM Plex Sans for headings and interface elements.
+- Inconsolata for code and preformatted text.
+
+The color system supports independent light, dark and system display modes,
+with selectable palettes: Modus, Modus Tinted, Ef Elea, Ef Maris and Ef Trio.
+The Modus palettes are based on the CC0-licensed
+[Modus themes](https://github.com/protesilaos/modus-themes).
+The Ef palettes are based on
+[Protesilaos's Ef themes](https://github.com/protesilaos/ef-themes).
+
+JavaScript is organized into ES modules and bundled with esbuild. Grease's
+existing utilities and components are adapted as needed by the site.
+
 ## Assets and icons
 
 Static assets are stored in `_source/assets/`. The site uses a custom Niori icon, with PNG and ICO versions.
@@ -146,7 +174,7 @@ The site generates:
 - `/sitemap.xml` — XML sitemap.
 - `/404.html` — custom not-found page.
 
-The sitemap excludes pages marked `noindex`, including the documentation and kitchen-sink demo pages.
+The sitemap excludes pages marked `noindex`.
 
 ## Publishing
 
@@ -154,7 +182,7 @@ GitHub Actions builds and deploys the site to GitHub Pages.
 
 The workflow is `.github/workflows/deploy.yml`.
 
-It runs when changes are pushed to `main`, or when manually triggered from the Actions tab. The workflow installs Node.js and Emacs, runs `npm ci`, builds the production site and deploys `_public/`.
+It runs when changes are pushed to `main`, or when manually triggered from the Actions tab. The workflow installs Node.js, Emacs and GNU Texinfo, runs `npm ci`, builds the production site and deploys `_public/`.
 
 The custom domain is configured through the published `CNAME` file.
 
@@ -163,3 +191,40 @@ The custom domain is configured through the published `CNAME` file.
 The website's original software licence is MIT. Third-party notices for the Grease starter are recorded in `THIRD-PARTY-NOTICES.md`.
 
 Blog posts are published under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International licence (CC BY-NC-SA 4.0).
+
+
+## Niori manual
+
+The canonical source for the Niori application manual is
+`docs/niori.texi`. It is written in GNU Texinfo, which produces two
+formats from the same source:
+
+- HTML, embedded in the website documentation at `/docs/`.
+- An Info manual at `docs/build/niori.info`, readable in Emacs.
+
+Edit `docs/niori.texi` to update the manual. The
+[GNU Texinfo manual](https://www.gnu.org/software/texinfo/manual/texinfo/)
+explains the markup and cross-reference syntax.
+
+Build both formats manually with:
+
+```bash
+npm run docs:build
+```
+
+The website's `start`, `publish:stage` and `publish:prod` commands run
+this step automatically. After editing the Texinfo source while the
+development server is running, run `npm run docs:build` again.
+
+To read the generated manual in Emacs, run `M-x info`, press `g`, and
+enter:
+
+```text
+(docs/build/niori.info)Top
+```
+
+The generated files are build artifacts and are not committed. The
+`.texi` source is the version-controlled manual.
+
+Org mode remains a separate format for individual website content;
+Texinfo is the source format for the Niori application manual.
