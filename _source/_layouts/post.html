@@ -20,14 +20,28 @@ layout: base.html
       {{ content }}
     </div>
 
-    {% if tags.size > 0 %}
-      <footer>
-        <ul class="unlisted inline-flex gap-xs">
-          {% for tag in tags %}
-            <li><a href="/archive.html?tag={{ tag | url_encode }}">{{ tag }}</a></li>
-          {% endfor %}
-        </ul>
-      </footer>
-    {% endif %}
+    <footer>
+  {% if tags.size > 0 %}
+    <ul class="unlisted inline-flex gap-xs">
+      {% for tag in tags %}
+        <li><a href="/archive.html?tag={{ tag | url_encode }}">{{ tag }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <p>
+    <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+      <img
+        alt="Creative Commons License"
+        src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
+      >
+    </a>
+    <br>
+    This work is licensed under a
+    <a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+      Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+    </a>.
+  </p>
+</footer>
   </article>
 </main>
