@@ -1,0 +1,33 @@
+---
+layout: base.html
+---
+
+<main class="grid">
+  <article itemscope itemtype="https://schema.org/BlogPosting">
+    <header>
+      <h1 itemprop="headline">{{ title }}</h1>
+
+      <p class="item__meta">
+        <time
+          itemprop="datePublished"
+          datetime="{{ page.date | date: '%Y-%m-%dT%H:%M:%S', 'UTC' }}Z"
+        >{{ page.date | date: "%B %d, %Y" }}</time>
+      </p>
+      <meta itemprop="dateModified" content="{{ page.date | date: '%Y-%m-%dT%H:%M:%S', 'UTC' }}Z">
+    </header>
+
+    <div class="article__content" itemprop="articleBody">
+      {{ content }}
+    </div>
+
+    {% if tags.size > 0 %}
+      <footer>
+        <ul class="unlisted inline-flex gap-xs">
+          {% for tag in tags %}
+            <li><a href="/archive.html?tag={{ tag | url_encode }}">{{ tag }}</a></li>
+          {% endfor %}
+        </ul>
+      </footer>
+    {% endif %}
+  </article>
+</main>

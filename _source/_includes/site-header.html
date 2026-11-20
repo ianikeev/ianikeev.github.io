@@ -1,0 +1,28 @@
+<header id="header" class="grid">
+  <nav class="flex no-wrap justify-between align-items-center">
+    <a
+      class="font-size-xl font-size-lg@md font-weight-xxl uppercase line-height-flush undecorated button --simple --primary pt-0 pb-0"
+      href="/"
+    >
+      <span>Two Lads and a Cat</span>
+    </a>
+
+    <div class="inline-flex gap-xs shrink align-items-center">
+      <ul class="unlisted inline-flex gap-xs shrink align-items-center">
+        {% for item in navigation.header %}
+          <li>
+            <a
+              href="{{ item.url }}"
+              class="button --subtle --primary shadow-md"
+              {% if page.url == item.url %}aria-current="page"{% endif %}
+            >
+              {{ item.title }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      {% render "docs/theme-picker.html" modes: modes, themes: themes %}
+    </div>
+  </nav>
+</header>

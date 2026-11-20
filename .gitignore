@@ -5,3 +5,8 @@ vendor/
 Gemfile.lock
 *.gem
 .DS_Store
+
+# Eleventy / Grease
+node_modules/
+_public/
+.cache/
