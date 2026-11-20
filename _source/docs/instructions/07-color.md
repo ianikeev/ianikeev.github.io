@@ -29,3 +29,18 @@ border-color: light-dark(
 - `.text-{10-90}` adjusts text opacity
 - `.bg-{10-90}` adjusts background opacity
 - `.border-{10-90}` adjusts border opacity
+
+### Site colour themes
+
+The site provides five palettes: Modus, Modus Tinted, Ef Elea, Ef Maris, and Ef Trio.
+Each palette supports both light and dark display modes. The display mode is selected
+independently, using the operating-system preference by default.
+
+The Modus palettes are based on the official
+[Modus theme colour definitions](https://protesilaos.com/emacs/modus-themes-colors).
+The palette colours are dedicated to the public domain under CC0.
+
+The Ef palettes are adapted from the
+[Ef themes](https://github.com/protesilaos/ef-themes) by Protesilaos.
+The light and dark variants are paired for this site's independent display-mode
+selector.

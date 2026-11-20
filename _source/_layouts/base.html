@@ -7,12 +7,26 @@
 
     <script>
       document.documentElement.classList.add('js');
-      const theme = localStorage.getItem('theme') || 'default';
-      const mode = localStorage.getItem('mode') || 'system';
 
-      if (theme !== 'default') {
-        document.documentElement.classList.add(theme);
-      }
+      const availableThemes = [
+        'modus',
+        'modus-tinted',
+        'ef-elea',
+        'ef-maris',
+        'ef-trio'
+      ];
+
+      const savedTheme = localStorage.getItem('theme');
+      const theme = availableThemes.includes(savedTheme) ? savedTheme : 'modus';
+      const savedMode = localStorage.getItem('mode');
+      const mode = ['system', 'dark', 'light'].includes(savedMode)
+        ? savedMode
+        : 'system';
+
+      if (savedTheme !== theme) localStorage.setItem('theme', theme);
+      if (savedMode !== mode) localStorage.setItem('mode', mode);
+
+      document.documentElement.classList.add(theme);
 
       if (mode !== 'system') {
         document.documentElement.classList.add(mode);

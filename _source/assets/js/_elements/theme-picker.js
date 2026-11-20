@@ -17,8 +17,20 @@ export default class ThemePicker extends HTMLElement {
 	}
 
 	applyValues() {
-		const theme = window.localStorage.getItem('theme') || 'default';
-		const mode = window.localStorage.getItem('mode') || 'system';
+		const availableThemes = [
+			'modus',
+			'modus-tinted',
+			'ef-elea',
+			'ef-maris',
+			'ef-trio',
+		];
+
+		const savedTheme = window.localStorage.getItem('theme');
+		const theme = availableThemes.includes(savedTheme) ? savedTheme : 'modus';
+		const savedMode = window.localStorage.getItem('mode');
+		const mode = ['system', 'dark', 'light'].includes(savedMode)
+			? savedMode
+			: 'system';
 
 		if (this.currentTheme && this.currentTheme !== 'default') {
 			this.target.classList.remove(this.currentTheme);
@@ -28,12 +40,25 @@ export default class ThemePicker extends HTMLElement {
 			this.target.classList.remove(this.currentMode);
 		}
 
-		if (theme !== 'default') {
-			this.target.classList.add(theme);
-		}
+		this.target.classList.remove(
+			'high-contrast',
+			'low-contrast',
+			'primary',
+			'secondary',
+		);
+
+		this.target.classList.add(theme);
 
 		if (mode !== 'system') {
 			this.target.classList.add(mode);
+		}
+
+		if (savedTheme !== theme) {
+			window.localStorage.setItem('theme', theme);
+		}
+
+		if (savedMode !== mode) {
+			window.localStorage.setItem('mode', mode);
 		}
 
 		this.currentTheme = theme;
@@ -74,9 +99,9 @@ export default class ThemePicker extends HTMLElement {
 		this.target = document.documentElement;
 		this.currentTheme = window.localStorage.getItem('theme') || 'default';
 		this.currentMode = window.localStorage.getItem('mode') || 'system';
+		this.applyValues();
 		this.updateButtons('theme', this.currentTheme);
 		this.updateButtons('mode', this.currentMode);
-		this.applyValues();
 		this.setupControls();
 	}
 

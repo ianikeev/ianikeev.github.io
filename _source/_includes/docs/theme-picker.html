@@ -13,7 +13,7 @@
     <ul role="group" aria-label="Themes">
       {% for item in themes %}
         <li role="none">
-          <button class="button --menu --primary" data-type="theme" data-value="{{ item }}" role="menuitem">{{ item }}</button>
+          <button class="button --menu --primary" data-type="theme" data-value="{{ item.value }}" role="menuitem">{{ item.label }}</button>
         </li>
       {% endfor %}
     </ul>

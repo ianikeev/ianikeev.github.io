@@ -1,7 +1,7 @@
 [
-  "default",
-  "low-contrast",
-  "high-contrast",
-  "primary",
-  "secondary"
+  { "value": "modus", "label": "Modus" },
+  { "value": "modus-tinted", "label": "Modus Tinted" },
+  { "value": "ef-elea", "label": "Ef Elea" },
+  { "value": "ef-maris", "label": "Ef Maris" },
+  { "value": "ef-trio", "label": "Ef Trio" }
 ]

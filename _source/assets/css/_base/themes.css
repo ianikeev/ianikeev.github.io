@@ -1,3 +1,12 @@
+/*
+ * Palette sources:
+ * Modus: https://protesilaos.com/emacs/modus-themes-colors
+ * Ef: https://github.com/protesilaos/ef-themes
+ *
+ * Each Ef theme combines its light and dark palettes so the site's
+ * independent System / Light / Dark mode selector continues to work.
+ */
+
 .inverted {
 	color-scheme: dark;
 
@@ -14,117 +23,56 @@
 	color-scheme: light;
 }
 
-.high-contrast {
-	--neutral: oklch(30% 0 300deg);
-	--primary: oklch(30% 0.36 250deg);
-	--secondary: oklch(85% 0.36 250deg);
-	--color-text: light-dark(black, white);
-	--color-bg: light-dark(white, oklch(from var(--neutral) 10% c h));
-	--color-bg-dark: light-dark(
-		oklch(from var(--neutral) var(--50)),
-		oklch(from var(--neutral) var(--800))
-	);
-	--color-accent: light-dark(
-		oklch(from var(--primary) var(--700)),
-		oklch(from var(--primary) var(--200))
-	);
-	--color-link: light-dark(
-		oklch(from var(--secondary) var(--500)),
-		oklch(from var(--secondary) var(--200))
-	);
-	--color-border: light-dark(
-		oklch(from var(--neutral) var(--700)),
-		oklch(from var(--neutral) var(--200))
-	);
+/* Modus Operandi / Modus Vivendi are the default palette in @root.css. */
+
+.modus-tinted {
+	--neutral: light-dark(#9f9690, #61647a);
+	--primary: light-dark(#0031a9, #2fafff);
+	--secondary: light-dark(#00598b, #00d3d0);
+
+	--color-text: light-dark(#000000, #ffffff);
+	--color-bg: light-dark(#fbf7f0, #0d0e1c);
+	--color-bg-dark: light-dark(#efe9dd, #1d2235);
+	--color-accent: light-dark(#0031a9, #2fafff);
+	--color-link: light-dark(#3546c2, #79a8ff);
+	--color-border: light-dark(#9f9690, #61647a);
 }
 
-.low-contrast {
-	--neutral: oklch(30% 0.04 300deg);
-	--primary: oklch(30% 0.04 300deg);
-	--secondary: oklch(60% 0.04 200deg);
-	--color-text: light-dark(
-		oklch(from var(--primary) var(--500)),
-		oklch(from var(--primary) var(--300))
-	);
-	--color-bg: light-dark(
-		oklch(from var(--primary) var(--100)),
-		oklch(from var(--primary) var(--800))
-	);
-	--color-bg-dark: light-dark(
-		oklch(from var(--neutral) 92% calc(c / 3) h),
-		oklch(from var(--primary) 20% calc(c / 2) h)
-	);
-	--color-accent: light-dark(
-		oklch(from var(--primary) var(--400)),
-		oklch(from var(--primary) var(--400))
-	);
-	--color-link: light-dark(
-		oklch(from var(--secondary) var(--500)),
-		oklch(from var(--secondary) var(--300))
-	);
-	--color-border: light-dark(
-		oklch(from var(--neutral) var(--200)),
-		oklch(from var(--neutral) var(--700))
-	);
+.ef-elea {
+	--neutral: light-dark(#a5aaaf, #5d5f63);
+	--primary: light-dark(#5f5f1f, #8fcfbb);
+	--secondary: light-dark(#5f5f1f, #8fcfbb);
+
+	--color-text: light-dark(#221321, #eaf2ef);
+	--color-bg: light-dark(#edf5e2, #222524);
+	--color-bg-dark: light-dark(#e3e9d6, #303332);
+	--color-accent: light-dark(#5f5f1f, #8fcfbb);
+	--color-link: light-dark(#5f5f1f, #8fcfbb);
+	--color-border: light-dark(#a5aaaf, #5d5f63);
 }
 
-.primary {
-	--neutral: oklch(30% 0.2 300deg);
-	--primary: oklch(20% 0.2 300deg);
-	--secondary: oklch(70% 0.2 300deg);
-	--color-text: light-dark(
-		oklch(from var(--primary) var(--700)),
-		oklch(from var(--primary) var(--50))
-	);
-	--color-bg: light-dark(
-		oklch(from var(--primary) var(--100)),
-		oklch(from var(--primary) var(--800))
-	);
-	--color-bg-dark: light-dark(
-		oklch(from var(--primary) var(--50)),
-		oklch(from var(--primary) var(--900))
-	);
-	--color-accent: light-dark(
-		oklch(from var(--primary) var(--500)),
-		oklch(from var(--primary) var(--300))
-	);
-	--color-link: light-dark(
-		oklch(from var(--secondary) var(--500)),
-		oklch(from var(--secondary) var(--200))
-	);
-	--color-border: light-dark(
-		oklch(from var(--neutral) var(--200)),
-		oklch(from var(--neutral) var(--600))
-	);
+.ef-maris {
+	--neutral: light-dark(#a2a6af, #595a63);
+	--primary: light-dark(#3f4f99, #90a0dc);
+	--secondary: light-dark(#3f4f99, #90a0dc);
+
+	--color-text: light-dark(#151a27, #eaedef);
+	--color-bg: light-dark(#edf4f8, #131c2b);
+	--color-bg-dark: light-dark(#e0e7ef, #1d2c39);
+	--color-accent: light-dark(#3f4f99, #90a0dc);
+	--color-link: light-dark(#3f4f99, #90a0dc);
+	--color-border: light-dark(#a2a6af, #595a63);
 }
 
-.secondary {
-	--h: 210;
-	--neutral: oklch(30% 0.15 var(--h));
-	--primary: oklch(20% 0.15 var(--h));
-	--secondary: oklch(70% 0.15 var(--h));
-	--color-text: light-dark(
-		oklch(from var(--primary) var(--700)),
-		oklch(from var(--primary) var(--50))
-	);
-	--color-bg: light-dark(
-		oklch(from var(--primary) var(--100)),
-		oklch(from var(--primary) var(--700))
-	);
-	--color-bg-dark: light-dark(
-		oklch(from var(--primary) var(--50)),
-		oklch(from var(--primary) var(--800))
-	);
-	--color-accent: light-dark(
-		oklch(from var(--primary) var(--500)),
-		oklch(from var(--primary) var(--300))
-	);
-	--color-link: light-dark(
-		oklch(from var(--secondary) var(--400)),
-		oklch(from var(--secondary) var(--200))
-	);
-	--color-border: light-dark(
-		oklch(from var(--neutral) var(--300)),
-		oklch(from var(--neutral) var(--900))
-	);
+.ef-trio {
+	--neutral: light-dark(#c6bac5, #605760);
+	--primary: light-dark(#3f7668, #afdacf);
+	--secondary: light-dark(#3f7668, #afdacf);
+
+	--color-text: light-dark(#4f3363, #d8cfd5);
+	--color-bg: light-dark(#f8f5ff, #160f0f);
+	--color-bg-dark: light-dark(#ebe7f1, #2a2228);
+	--color-accent: light-dark(#3f7668, #afdacf);
+	--color-link: light-dark(#3f7668, #afdacf);
+	--color-border: light-dark(#c6bac5, #605760);
 }
