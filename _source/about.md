@@ -5,6 +5,7 @@ permalink: /about/
 ---
 
 <main class="grid">
+
 Hello, I'm Igor. I'm building **{{ app.name }}**, a personal medical
 information manager, and writing about the process in public — the decisions,
 the dead ends, and the parts I get wrong.
