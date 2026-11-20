@@ -36,6 +36,9 @@ export default async function (eleventyConfig) {
 	eleventyConfig.setServerPassthroughCopyBehavior('passthrough');
 	eleventyConfig.addPassthroughCopy('_source/assets/fonts');
 	eleventyConfig.addPassthroughCopy('_source/assets/images');
+	eleventyConfig.addPassthroughCopy('_source/CNAME');
+	eleventyConfig.addPassthroughCopy('_source/site.webmanifest');
+	eleventyConfig.addPassthroughCopy('_source/favicon.ico');
 
 	/* --------------------------------------------------------------------------
 	  Org-mode
