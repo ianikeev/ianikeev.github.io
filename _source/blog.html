@@ -10,25 +10,22 @@ permalink: /blog/
     <h1>Blog</h1>
   </header>
 
-  <div class="article-list items">
-    <ul class="items">
-      {% for post in collections.posts %}
-        <li
-          class="item"
-          itemscope
-          itemtype="http://schema.org/BlogPosting"
-          data-tags="{% for tag in post.data.tags %}{% unless forloop.first %},{% endunless %}{{ tag | url_encode }}{% endfor %}"
-        >
-          <div class="item__content">
-            <span class="item__meta">{{ post.date | date: "%b %d, %Y" }}</span>
-            <a
-              itemprop="headline"
-              class="item__header"
-              href="{{ post.url }}"
-            >{{ post.data.title }}</a>
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+  <ul>
+    {% for post in collections.posts %}
+    <li
+      itemscope
+      itemtype="http://schema.org/BlogPosting"
+      data-tags="{% for tag in post.data.tags %}{% unless forloop.first %},{% endunless %}{{ tag | url_encode }}{% endfor %}"
+    >
+      <div class="item__content">
+        <span class="item__meta">{{ post.date | date: "%b %d, %Y" }}</span>
+        <a
+          itemprop="headline"
+          class="item__header"
+          href="{{ post.url }}"
+        >{{ post.data.title }}</a>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
 </main>

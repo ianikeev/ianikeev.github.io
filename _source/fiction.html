@@ -10,15 +10,15 @@ permalink: /fiction/
     <h1>Fiction</h1>
   </header>
 
-    <div class="grid --gap-md --gap-y-md">
+  <ul>
     {% for story in collections.fiction %}
-      <article class="span-1/3">
-        <div class="item__content">
-          <a class="item__header" href="{{ story.url }}">
-            {{ story.data.title }}
-          </a>
-        </div>
-      </article>
+    <li>
+      <div class="item__content">
+        <a class="item__header" href="{{ story.url }}">
+          {{ story.data.title }}
+        </a>
+      </div>
+    </li>
     {% endfor %}
-  </div>
+  </ul>
 </main>
