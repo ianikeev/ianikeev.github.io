@@ -1,4 +1,5 @@
 import markdownIt from 'markdown-it';
+import footnotePlugin from 'markdown-it-footnote';
 import orgToHtml from './_source/_utilities/org.js';
 import esbuild from './_source/_utilities/esbuild.js';
 import lightingcss from './_source/_utilities/lightningcss.js';
@@ -39,6 +40,12 @@ export default async function (eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('_source/CNAME');
 	eleventyConfig.addPassthroughCopy('_source/site.webmanifest');
 	eleventyConfig.addPassthroughCopy('_source/favicon.ico');
+	eleventyConfig.addPassthroughCopy('_source/assets/downloads');
+	eleventyConfig.addPassthroughCopy('_source/documentation/niori');
+
+	eleventyConfig.amendLibrary('md', (mdLib) => {
+		mdLib.use(footnotePlugin);
+	});
 
 	/* --------------------------------------------------------------------------
 	  Org-mode

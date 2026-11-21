@@ -15,7 +15,7 @@ and most of it lives in systems you cannot export from.
 
 ## The idea
 
-**{{ app.name }}** — {{ app.one_liner }}. One place to collect your
+**{{ app.name }}**[^1] — {{ app.one_liner }}. One place to collect your
 own records, understand what is in them, and walk into an appointment with a
 clear history instead of a folder of scans. Yours to keep, in a format you can
 take with you.
@@ -43,4 +43,7 @@ it will show up here and in the build log.
 - [The build log](/blog/) — progress, decisions, and dead ends.
 - [All posts](/archive.html) — the same thing, by date.
 - [About](/about/) — who is writing this.
+
+[^1]: **Niori** means garlic in Georgian, and everyone knows that garlic is good for your health.
+
 </main>

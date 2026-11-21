@@ -3,7 +3,9 @@ name: Deploy Eleventy site to Pages
 
 on:
   push:
-    branches: ["main"]
+    branches: 
+    - main
+    - feature/documentation-publishing
 
   workflow_dispatch:
 
@@ -29,11 +31,19 @@ jobs:
           node-version: 24
           cache: npm
 
-      - name: Install Emacs
+      - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --no-install-recommends -y emacs-nox texinfo
+          sudo apt-get install --no-install-recommends -y \
+            emacs-nox \
+            texinfo
 
+      - name: Install TeX Live
+        uses: zauguin/install-texlive@v4
+        with:
+          texlive_version: '2026'
+          package_file: .github/tl_packages
+       
       - name: Install dependencies
         run: npm ci
 
@@ -49,6 +59,7 @@ jobs:
           path: _public
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

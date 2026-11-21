@@ -1,0 +1,16 @@
+scheme-basic
+latexmk
+xetex
+fontspec
+erewhon
+plex
+inconsolata
+microtype
+xcolor
+framed
+eurosym
+titlesec
+imakeidx
+xkeyval
+enumitem
+float
