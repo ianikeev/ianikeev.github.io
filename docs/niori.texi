@@ -10,6 +10,11 @@ Copyright @copyright{} 2026 Igor Anikeev.
 This manual documents Niori, a medical information manager.
 @end copying
 
+@dircategory Emacs
+@direntry
+* Niori: (niori).               Personal medical records for Emacs.
+@end direntry
+
 @titlepage
 @title Niori
 @subtitle Manual
@@ -36,6 +41,7 @@ installation, configuration, features and operation.
 * Configuration::
 * Data and Privacy::
 * Troubleshooting::
+* Index::
 @end menu
 
 @node Overview
@@ -43,29 +49,1103 @@ installation, configuration, features and operation.
 
 This chapter introduces Niori, its purpose and its main concepts.
 
+@menu
+* What is Niori::
+* Features::
+* Requirements::
+* Concepts::
+@end menu
+
+@node What is Niori
+@section What is Niori
+
+@cindex medical records
+Niori is a personal medical information manager for GNU Emacs.  It
+keeps your @dfn{medications}, @dfn{visits}, @dfn{lab tests} and
+@dfn{vaccinations} in a single local SQLite database, presented
+through a dashboard that surfaces what needs attention: upcoming
+appointments, abnormal results and boosters that are due.  The reports
+and scans behind those records (PDF, DOCX, images) live in the same
+data directory, attached to the record they belong to.
+
+Niori is an Emacs port of the niori Common Lisp/CLOG application
+(@uref{https://github.com/ianikeev/niori}) and keeps its
+NetBeans-Platform-style module architecture, translated to Emacs
+idioms.  Rather than reimplementing UI toolkits, it composes the
+platform Emacs already provides: @code{tabulated-list-mode} rosters,
+@code{widget} forms, the built-in @code{sqlite} binding, Modus themes
+and transient menus.
+
+It runs as a package inside your Emacs, or as a standalone application
+on a stock, configuration-free Emacs (@pxref{Installing as a standalone
+application}).  Your data stays yours: one data directory holds the
+database and every attached document, offline by default, with an
+optional GPG-encrypted Org export and automatic revision snapshots you
+can diff with @code{ediff} (@pxref{History and revisions}).  Niori is
+free software under GPL-3.0-or-later, uses lexical binding everywhere
+and depends on GNU ELPA packages only.  This manual describes version
+0.1.0 of niori.el.
+
+@node Features
+@section Features
+
+@cindex modules
+Niori tracks four kinds of clinical records.  Each is an independent
+module with its own roster, form and dashboard section:
+
+@multitable @columnfractions 0.20 0.45 0.35
+@headitem Module @tab What you track @tab Dashboard section
+@item Medications @tab name, dosage, form, dates, prescriber, instructions @tab active medications list
+@item Visits @tab date, doctor, facility, reason, diagnosis, notes @tab upcoming visits (next 30 days)
+@item Lab tests @tab date, name, result, unit, reference range, flag @tab latest result per test, abnormal flags
+@item Vaccinations @tab date, vaccine, dose, route, lot, provider, next due @tab boosters due / overdue
+@end multitable
+
+@noindent
+Several features cut across all modules:
+
+@itemize @bullet
+@item
+@dfn{Rosters} (sortable @code{tabulated-list-mode} buffers), @dfn{forms}
+(validated @code{widget} buffers with date checks) and @dfn{detail
+views} with buttons.
+@item
+@dfn{Documents}: attach any file (PDF, DOCX, image, @dots{}) to a
+record; it is copied into the data directory and opened with
+@code{doc-view}, @code{image-mode} or an external viewer
+(@pxref{Documents}).
+@item
+@dfn{Letters} composed from visit records, with @code{flyspell}
+spell-checking and optional @code{yasnippet} templates
+(@pxref{Visits and letters}).
+@item
+@dfn{Exports}: Org (optionally encrypted), CSV and FHIR JSON
+(@pxref{Exporting data}).
+@item
+@dfn{History}: every change or deletion is snapshotted, and any record
+can be diffed against its previous revision (@pxref{History and
+revisions}).
+@item
+@dfn{Backups}: one keystroke copies the database to a timestamped file
+(@pxref{Backups}).
+@item
+FHIR R4 export plus an authenticated FHIR client
+(@pxref{FHIR interoperability}).
+@end itemize
+
+@node Requirements
+@section Requirements
+
+@cindex requirements
+Niori needs GNU Emacs 29.1 or later, built with SQLite support.  That
+is the default on major distributions; Niori checks at startup and
+tells you if SQLite is missing (@pxref{No SQLite support}).
+
+The following tools are optional; the features they support degrade
+gracefully without them:
+
+@table @asis
+@item @command{gpg}
+Needed for the encrypted Org export (@pxref{Encryption}).
+@item @command{hunspell} or @command{aspell}
+Needed for spell-checking letters (@pxref{Visits and letters}).
+@item A system opener
+@command{xdg-open} on GNU/Linux, @command{open} on macOS, the shell's
+own associations on MS-Windows, for documents Emacs cannot display
+(DOCX, XLSX, @dots{}) (@pxref{Documents}).
+@item A FHIR server
+Only if you want to retrieve records from one
+(@pxref{FHIR interoperability}).
+@end table
+
+@noindent
+The GNU ELPA dependencies @code{compat}, @code{transient},
+@code{auto-dark} and @code{fontaine} are installed automatically when
+you install the package (@pxref{Installing as a package}).
+
+@node Concepts
+@section Concepts
+
+@cindex concepts
+These terms recur throughout the manual:
+
+@table @dfn
+@item Module
+A clinical domain (medications, visits, lab tests, vaccinations).  A
+module registers its database schema, roster columns, form fields and
+dashboard section; a generic view layer renders all of it, so a module
+file contains no buffer code of its own.
+@item Roster
+A sortable list buffer showing all records of one kind
+(@pxref{Rosters}).
+@item Form
+A @code{widget} buffer for creating or editing one record, with
+validated fields and date checks (@pxref{Forms}).
+@item Detail view
+A read-only buffer describing one record, with buttons for the actions
+that apply to it (@pxref{Detail views}).
+@item Dashboard
+The central buffer combining each module's section into one overview of
+what needs attention (@pxref{The dashboard}).
+@item Data directory
+The single directory holding the SQLite database, attached documents,
+backups and exports; the unit of backup, sync and relocation
+(@pxref{The data directory}).
+@item Revision
+A JSON snapshot of the previous state of a record, written
+automatically on every update or delete (@pxref{Revisions and audit
+trail}).
+@end table
+
 @node Installation
 @chapter Installation
 
 This chapter describes how to obtain, install and run Niori.
+
+@menu
+* Installing as a package::
+* Installing as a standalone application::
+* First run::
+* Upgrading::
+@end menu
+
+@node Installing as a package
+@section Installing as a package
+
+@cindex installation, as a package
+The package is called @code{niori} (this repository is
+@uref{https://github.com/ianikeev/niori.el, niori.el}).  Once it is on
+MELPA, install it with @code{use-package}:
+
+@lisp
+(use-package niori
+  :ensure t
+  :commands (niori niori-dashboard))
+@end lisp
+
+@noindent
+To install it straight from a checkout while it is not yet packaged,
+add the repository to your load path:
+
+@lisp
+(use-package niori
+  :load-path "~/src/niori.el"
+  :commands (niori niori-dashboard))
+@end lisp
+
+@noindent
+The GNU ELPA dependencies (@code{compat}, @code{transient},
+@code{auto-dark}, @code{fontaine}) are declared in @file{niori.el} and
+installed automatically; @code{package.el} users who prefer
+@code{use-package} need nothing else.  A MELPA recipe ships in
+@file{recipes/niori}.
+
+@node Installing as a standalone application
+@section Installing as a standalone application
+
+@cindex installation, standalone
+@cindex standalone application
+Niori can run as a full application on a stock, configuration-free
+Emacs (@code{emacs -Q}):
+
+@example
+git clone https://github.com/ianikeev/niori.el
+./niori.el/bin/niori
+@end example
+
+@noindent
+That is all.  On the first run (when online) the launcher installs the
+GNU ELPA dependencies plus @code{vertico}, @code{consult},
+@code{orderless} and @code{which-key}; run fully offline it degrades
+gracefully to built-ins (Modus themes with day/night switching,
+@code{fido-vertical-mode}, plain keymap help).  Set the environment
+variable @env{NIORI_NO_NET} to @code{1} to always start offline
+(@pxref{Environment variables}).
+
+To install it properly, with a desktop entry:
+
+@example
+make install              # defaults to ~/.local
+# or: make install PREFIX=/usr/local
+@end example
+
+@noindent
+This installs @file{bin/niori}, the Elisp sources under
+@file{share/emacs/site-lisp/niori/}, the icon, and
+@file{etc/niori.desktop} rewritten with the absolute @code{Exec=} path.
+
+@node First run
+@section First run
+
+@cindex first run
+The first time Niori opens its database, it creates the data directory
+(owner-only, mode @code{0700}, with the @file{.niori-data} layout
+marker) and the SQLite file inside it, then runs any pending migrations
+(@pxref{Schema migrations}).  The database starts empty: there is no
+seed data.  Open the dashboard with @kbd{M-x niori} and add your first
+record (@pxref{Starting out}).
+
+@node Upgrading
+@section Upgrading
+
+@cindex upgrading
+Schema changes run through numbered migrations, recorded in the
+@code{schema_migrations} table.  A new version upgrades your database
+in place: you install it and keep using the same data directory.  New
+@emph{tables}---like the @code{attachments} table of a later
+release---appear on the next open without a migration.
 
 @node Using Niori
 @chapter Using Niori
 
 This chapter explains the application's features and workflows.
 
+@menu
+* Starting out::
+* The dashboard::
+* Rosters::
+* Forms::
+* Detail views::
+* Medications::
+* Visits and letters::
+* Lab tests::
+* Vaccinations::
+* Documents::
+* Exporting data::
+* History and revisions::
+* Backups::
+* FHIR interoperability::
+@end menu
+
+@node Starting out
+@section Starting out
+
+@findex niori
+@kindex C-c M
+Type @kbd{M-x niori} to open the dashboard and enable the key bindings.
+The command turns on @code{niori-mode}, a global minor mode, so the
+@kbd{C-c M} prefix works in every buffer; until then Niori has zero
+footprint in your Emacs.  Everything is reachable from the dashboard's
+buttons, or from the keyboard:
+
+@table @kbd
+@item C-c M d
+@kindex C-c M d
+Open the dashboard (@pxref{The dashboard}).
+@item C-c M m
+@kindex C-c M m
+Medications roster (@pxref{Medications}).
+@item C-c M v
+@kindex C-c M v
+Visits roster (@pxref{Visits and letters}).
+@item C-c M t
+@kindex C-c M t
+Lab tests roster (@pxref{Lab tests}).
+@item C-c M c
+@kindex C-c M c
+Vaccinations roster (@pxref{Vaccinations}).
+@item C-c M a @var{module}
+@kindex C-c M a
+Start a new record: @kbd{C-c M a m} for a medication, and likewise for
+visits, lab tests and vaccinations (@pxref{Forms}).
+@item C-c M E o
+@itemx C-c M E c
+@itemx C-c M E j
+@kindex C-c M E
+Export a module as Org, CSV or FHIR JSON (@pxref{Exporting data}).
+@item C-c M D
+@kindex C-c M D
+Diff a record against its last revision (@pxref{History and
+revisions}).
+@item C-c M f
+@kindex C-c M f
+Show every document you have attached (@pxref{Documents}).
+@item C-c M l
+@kindex C-c M l
+Compose a letter from a visit (@pxref{Visits and letters}).
+@item C-c M b
+@kindex C-c M b
+Back up the database (@pxref{Backups}).
+@item C-c M ?
+@kindex C-c M ?
+Open the transient command menu (when @code{transient} is installed).
+@item C-c M C-h
+@kindex C-c M C-h
+Show a full overview of every Niori key binding.
+@end table
+
+@noindent
+CUA bindings (@kbd{C-x}/@kbd{C-c}/@kbd{C-v} cut/copy/paste) are
+available for standalone users: set @code{niori-standalone-cua} to
+@code{t}, or type @kbd{M-x cua-mode} anytime.  Text size follows the
+desktop zoom keys @kbd{C-=}, @kbd{C-+} and @kbd{C--} (@pxref{Text
+size}).
+
+@node The dashboard
+@section The dashboard
+
+@cindex dashboard
+@findex niori-dashboard
+The dashboard is Niori's home screen; @kbd{M-x niori-dashboard} also
+opens it directly.  Each module contributes a section, so one buffer
+shows, at a glance:
+
+@itemize @bullet
+@item
+your active medications;
+@item
+upcoming visits, within @code{niori-visits-upcoming-days} days
+(default 30);
+@item
+the latest result of each lab test, with abnormal results flagged;
+@item
+vaccinations whose booster is due or overdue, within
+@code{niori-vaccinations-due-days} days (default 90).
+@end itemize
+
+@noindent
+Entries are buttons: follow one to open the record's detail view.
+After every write, Niori refreshes any open dashboard, roster and
+detail buffers for the affected module, so what you see is always
+current.
+
+@node Rosters
+@section Rosters
+
+@cindex rosters
+A roster lists all records of one kind in a sortable
+@code{tabulated-list-mode} buffer.  Open one from the dashboard or with
+@kbd{C-c M m} (medications), @kbd{C-c M v} (visits), @kbd{C-c M t} (lab
+tests) or @kbd{C-c M c} (vaccinations).
+
+@table @kbd
+@item RET
+Open the record under point in its detail view.
+@item a
+Add a new record (the same form as @kbd{C-c M a @dots{}}).
+@item e
+Edit the record under point.
+@item d
+Delete the record under point; Niori asks first
+(@pxref{Attachment safety}).
+@item g
+Refresh the roster.
+@item S
+Sort; clicking a column header sorts as well.
+@item D
+Diff the record under point against its previous revision
+(@pxref{History and revisions}).
+@item E
+Export the module (@pxref{Exporting data}).
+@item L
+Compose a letter from the visit under point (visits roster only,
+@pxref{Visits and letters}).
+@end table
+
+@node Forms
+@section Forms
+
+@cindex forms
+@cindex validation
+Records are created and edited in @code{widget} forms: buffers with
+labelled, validated fields, including checks on dates, so invalid data
+never reaches the database.
+
+@table @kbd
+@item C-c C-c
+@kindex C-c C-c
+Save the record.
+@item C-c C-k
+@kindex C-c C-k
+Cancel and leave the form.
+@end table
+
+@node Detail views
+@section Detail views
+
+@cindex detail views
+The detail view describes one record read-only, with buttons for the
+actions that apply to it.  It also accepts the roster keys: @kbd{e}
+edits, @kbd{d} deletes, @kbd{D} diffs against the previous revision,
+@kbd{L} composes a letter, and @kbd{E} opens the export menu.  In
+every detail view, @kbd{A} attaches a document to the record
+(@pxref{Documents}).  After a write, all open buffers of that module
+refresh automatically.
+
+@node Medications
+@section Medications
+
+@cindex medications
+The medications module tracks name, dosage, form, dates, prescriber and
+instructions for each medication.  The dashboard lists your active
+medications.  Open the roster with @kbd{C-c M m}; start a new record
+with @kbd{C-c M a m}, or with @kbd{a} from the roster.
+
+@node Visits and letters
+@section Visits and letters
+
+@cindex visits
+@cindex letters
+The visits module tracks date, doctor, facility, reason, diagnosis and
+notes for each visit; the dashboard lists upcoming visits within the
+configured window (@pxref{Variable reference}).  In the visits roster,
+@kbd{L} (or @kbd{C-c M l}) composes a @dfn{letter} from the record
+under point: a narrative document describing the visit, which you edit
+and file as you would any other document.  Letters are spell-checked
+with @code{flyspell} when a @command{hunspell} or @command{aspell}
+binary exists (@code{niori-letter-flyspell}), and optional
+@code{yasnippet} templates ship in @file{snippets/}
+(@pxref{Optional integrations}).
+
+@node Lab tests
+@section Lab tests
+
+@cindex lab tests
+The lab tests module tracks date, name, result, unit, reference range
+and flag.  The dashboard shows the latest result of each test, with
+abnormal flags, so an out-of-range result surfaces even when it was
+recorded weeks ago.  Open the roster with @kbd{C-c M t}.
+
+@node Vaccinations
+@section Vaccinations
+
+@cindex vaccinations
+The vaccinations module tracks date, vaccine, dose, route, lot,
+provider and next due.  The dashboard lists boosters that are due or
+overdue within the configured window.  Open the roster with
+@kbd{C-c M c}.
+
+@node Documents
+@section Documents
+
+@cindex documents
+@cindex attachments
+Any file---a PDF lab report, a DOCX letter, a photograph---can be
+attached to a visit, lab test, medication or vaccination.  Attach it
+with @kbd{A} in the record's detail view.  The file is copied into the
+data directory, one folder per record, so copying or syncing the data
+directory backs up the whole record (@pxref{The data directory});
+@code{niori-attachments-import-method} can also move or symlink instead
+(@pxref{Variable reference}).
+
+Attached documents open with @code{doc-view} (PDF), @code{image-mode}
+(images) or an external viewer for formats Emacs cannot display, such
+as DOCX or XLSX.
+
+@kbd{C-c M f} opens the list of every document you have attached:
+
+@table @kbd
+@item RET
+Open the document.
+@item f
+Open it with the external viewer.
+@item o
+Show its folder in Dired.
+@item r
+Retitle it.
+@item d
+Detach it; Niori asks before removing the file.
+@end table
+
+@noindent
+The safety rules behind these buffers---relative paths, checksums and
+orphan handling---are described in @ref{Attachment safety}.
+
+@node Exporting data
+@section Exporting data
+
+@cindex exports
+@findex niori-export-org
+Three export formats cover the common needs, and the output lands in
+@file{exports/} inside the data directory (@pxref{The data directory}):
+
+@table @kbd
+@item C-c M E o
+Export as Org (@code{niori-export-org}).
+@item C-c M E c
+Export as CSV.
+@item C-c M E j
+Export as FHIR JSON (@pxref{FHIR interoperability}).
+@end table
+
+@noindent
+The Org export can be encrypted with EasyPG: invoke it with a prefix
+argument, @kbd{C-u C-c M E o} (@pxref{Encryption}).  CSV exports open
+in @code{csv-mode} automatically when that package is installed.  If
+you keep narrative notes in Org files of your own, @code{org-ql} can
+run structured queries over exported Org archives
+(@pxref{Optional integrations}).
+
+@node History and revisions
+@section History and revisions
+
+@cindex history
+@findex niori-record-ediff
+Every update and delete first snapshots the current record, as JSON,
+into the @code{revisions} table---an audit trail inside the same
+database file (@pxref{Revisions and audit trail}).  Whether revisions
+are kept at all is controlled by @code{niori-store-keep-revisions}
+(@pxref{Variable reference}).
+
+@kbd{D} on any record in a roster, or @kbd{C-c M D}, opens an
+@code{ediff} between the pretty-printed current record and its previous
+revision, so you can see exactly what changed.
+
+@node Backups
+@section Backups
+
+@cindex backups
+@findex niori-store-backup
+@kbd{C-c M b} (@kbd{M-x niori-store-backup}) copies the database to a
+timestamped file in @file{backups/} inside the data directory.  Keep a
+copy on offline media; restoring one is described in @ref{Restoring a
+database}.  Because the data directory also holds every attached
+document, the directory itself is the unit of backup and relocation
+(@pxref{Backups and relocation}).
+
+@node FHIR interoperability
+@section FHIR interoperability
+
+@cindex FHIR
+@findex niori-fhir-export
+@kbd{C-c M E j} (@kbd{M-x niori-fhir-export}) writes a module as a FHIR
+R4 collection Bundle:
+
+@table @asis
+@item Medications
+become @code{MedicationStatement} resources;
+@item Visits
+become @code{Encounter} resources;
+@item Lab tests
+become @code{Observation} resources (numeric results as
+@code{valueQuantity}, flags as @code{H}, @code{L} and @code{A}
+interpretation codes);
+@item Vaccinations
+become @code{Immunization} resources.
+@end table
+
+@noindent
+The mapping is intentionally minimal---display strings, no code-system
+translation---which is right for personal export and review.
+
+For retrieval, set @code{niori-fhir-server-url} to the server's base
+URL and keep the bearer token in @code{auth-source}; then @kbd{M-x
+niori-fhir-fetch} issues authenticated requests with the built-in
+@code{url} library and returns parsed JSON (@pxref{Network access}).
+
 @node Configuration
 @chapter Configuration
 
 This chapter documents application settings and configuration files.
+
+@menu
+* Customizing Niori::
+* Variable reference::
+* Environment variables::
+* Appearance::
+* Text size::
+* Optional integrations::
+@end menu
+
+@node Customizing Niori
+@section Customizing Niori
+
+@cindex customization
+All user options live in the @code{niori} customization group: type
+@kbd{M-x customize-group RET niori RET} to browse them with
+descriptions and types, or set them with @code{setq} in your init
+file.  There is no configuration file of Niori's own to edit.  The
+standalone application runs without an init file; it is configured
+through its built-in defaults and the environment variables
+(@pxref{Environment variables}).
+
+When Niori runs inside your Emacs it never touches your theme or your
+fonts; the appearance layer only activates for the standalone
+application (@pxref{Appearance}).
+
+@node Variable reference
+@section Variable reference
+
+@cindex variables
+@cindex user options
+The essentials, all in the @code{niori} group:
+
+@table @code
+@item niori-data-directory
+@vindex niori-data-directory
+The data directory: database, documents, backups, exports.  Default
+@file{~/.local/share/niori}, subject to the environment
+(@pxref{Environment variables}).
+@item niori-data-file
+@vindex niori-data-file
+Default @code{nil}, meaning the database lives inside the data
+directory.  An absolute path here puts the database elsewhere.
+@item niori-documents-directory
+@vindex niori-documents-directory
+Default @code{nil}, meaning attached documents live inside the data
+directory.  An absolute path here puts them elsewhere.
+@item niori-attachments-import-method
+@vindex niori-attachments-import-method
+How an attached file enters the data directory: @code{copy} (default),
+@code{move} or @code{symlink}.
+@item niori-attachments-external-opener
+@vindex niori-attachments-external-opener
+External viewer for formats Emacs cannot display: @command{xdg-open} on
+GNU/Linux, @command{open} on macOS; MS-Windows uses
+@code{w32-shell-execute}.
+@item niori-store-tighten-data-directory
+@vindex niori-store-tighten-data-directory
+What happens on open when other users can reach the data directory:
+@code{t} (default) tightens it to owner-only, @code{advise} keeps your
+modes but reports once per session, @code{nil} stays silent
+(@pxref{File permissions}).
+@item niori-store-keep-revisions
+@vindex niori-store-keep-revisions
+Keep the revision audit trail; default @code{t} (@pxref{Revisions and
+audit trail}).
+@item niori-visits-upcoming-days
+@vindex niori-visits-upcoming-days
+Dashboard window for upcoming visits; default 30.
+@item niori-vaccinations-due-days
+@vindex niori-vaccinations-due-days
+Dashboard window for boosters due; default 90.
+@item niori-letter-flyspell
+@vindex niori-letter-flyspell
+Whether letters are spell-checked; default @code{auto}, which enables
+checking when a spell-checking binary exists (@pxref{Visits and
+letters}).
+@item niori-encryption-recipients
+@vindex niori-encryption-recipients
+GPG keys for encrypted exports; default @code{nil}
+(@pxref{Encryption}).
+@item niori-fhir-server-url
+@vindex niori-fhir-server-url
+Base URL of a FHIR server for retrieval; default @code{nil}
+(@pxref{FHIR interoperability}).
+@item niori-appearance-manage
+@vindex niori-appearance-manage
+Whether Niori manages theme and font; default @code{nil}, @code{t} in
+the standalone application (@pxref{Appearance}).
+@item niori-appearance-font-family
+@vindex niori-appearance-font-family
+Monospaced font used when the appearance layer manages fonts;
+auto-detected by default.
+@item niori-standalone-cua
+@vindex niori-standalone-cua
+Set to @code{t} to give standalone users the usual CUA cut/copy/paste
+bindings (@pxref{Starting out}).
+@end table
+
+@node Environment variables
+@section Environment variables
+
+@cindex environment variables
+Two environment variables matter most:
+
+@table @env
+@item NIORI_DATA_DIR
+Overrides @code{niori-data-directory}.  Useful for the standalone
+application, which has no init file to customize.
+@item NIORI_NO_NET
+Set to @code{1} to make the standalone bootstrap skip all package
+installation and always start offline.
+@end table
+
+@noindent
+The data directory itself resolves in this order: @env{$NIORI_DATA_DIR}
+when set; otherwise @file{$XDG_DATA_HOME/niori} (usually
+@file{~/.local/share/niori}); on MS-Windows, @file{%LOCALAPPDATA%\niori}.
+
+@node Appearance
+@section Appearance
+
+@cindex appearance
+@cindex themes
+Inside your Emacs, Niori never touches your theme or your fonts:
+@code{niori-appearance-manage} is @code{nil} by default and the
+appearance layer stays out of the way.  It only activates for the
+standalone application, which presents a complete, coherent look on its
+own.  There it prefers the GNU ELPA @code{auto-dark} package, switching
+between the @code{modus-operandi} and @code{modus-vivendi} themes with
+the day/night cycle, and @code{fontaine} for font presets, with
+built-in fallbacks when those packages are not available.  The font
+family is auto-detected; set @code{niori-appearance-font-family} to
+override it.
+
+@node Text size
+@section Text size
+
+@cindex text scale
+@cindex font size
+Once @code{niori-mode} is enabled (@kbd{M-x niori}, @pxref{Starting
+out}), the application follows the usual desktop zoom keys: @kbd{C-=}
+and @kbd{C-+} make the text larger, @kbd{C--} makes it smaller.  Repeat
+a key to keep growing or shrinking.  The keys work in every buffer,
+because @code{niori-mode} is a global minor mode; the scale itself is a
+per-buffer setting, so a roster, the dashboard and a letter each keep
+their own size.
+
+@table @kbd
+@item C-=
+@itemx C-+
+@kindex C-=
+@kindex C-+
+Increase the text size of the current buffer.
+@item C--
+@kindex C--
+Decrease the text size of the current buffer.
+@item C-x C-0 0
+@kindex C-x C-0
+Reset the text size of the current buffer to the default
+(@code{text-scale-adjust}, built into Emacs).
+@end table
+
+@noindent
+Note that @kbd{C--} shadows the usual negative prefix argument while
+@code{niori-mode} is enabled; use @kbd{M--} when a command needs a
+negative argument.
+
+@node Optional integrations
+@section Optional integrations
+
+@cindex integrations
+Niori prefers mature Emacs components over new code, and every optional
+integration is guarded at runtime: absence is a graceful downgrade, not
+an error.  When installed, the following light up automatically:
+
+@itemize @bullet
+@item
+@code{transient}: the @kbd{C-c M ?} command menu, runtime-defined, with
+a fallback when absent;
+@item
+@code{which-key}: keymap discoverability (built into Emacs 30, GNU ELPA
+otherwise);
+@item
+@code{vertico}, @code{consult}, @code{orderless}: completion in the
+standalone application, auto-installed when online, with
+@code{fido-vertical-mode} as the fallback;
+@item
+@code{yasnippet}: letter templates from @file{snippets/};
+@item
+@code{csv-mode}: CSV exports open in it automatically;
+@item
+@code{org-ql}: structured queries over exported Org archives.
+@end itemize
+
+@noindent
+MELPA-only packages are never hard requirements: the package header
+lists GNU ELPA dependencies only (@pxref{Requirements}).
 
 @node Data and Privacy
 @chapter Data and Privacy
 
 This chapter describes how Niori stores and handles information.
 
+@menu
+* The data directory::
+* File permissions::
+* Revisions and audit trail::
+* Backups and relocation::
+* Attachment safety::
+* Encryption::
+* Network access::
+* Schema migrations::
+@end menu
+
+@node The data directory
+@section The data directory
+
+@cindex data directory
+Everything Niori writes lives in one directory you choose---the unit of
+backup, sync and relocation.  Its location resolves to
+@env{$NIORI_DATA_DIR} when set, otherwise to @file{$XDG_DATA_HOME/niori}
+(usually @file{~/.local/share/niori}), or @file{%LOCALAPPDATA%\niori} on
+MS-Windows (@pxref{Environment variables}):
+
+@example
+~/.local/share/niori/
+|-- .niori-data          layout marker ("layout-version: 1")
+|-- niori.db             the database
+|-- documents/           attached files, one folder per record
+|   `-- visits/42/2026-11-20-lab-report.pdf
+|-- backups/             timestamped database copies
+|-- exports/             Org / CSV / FHIR output
+`-- letters/             reserved for saved letters
+@end example
+
+@noindent
+The @code{attachments} table stores paths @emph{relative} to the
+documents directory (@file{visits/42/2026-11-20-lab-report.pdf}), plus
+title, size, MIME type and SHA-256 checksum (@pxref{Attachment
+safety}).
+
+@node File permissions
+@section File permissions
+
+@cindex permissions
+@cindex file permissions
+On POSIX systems everything Niori writes is owner-only: the directory
+itself (mode @code{0700}, re-applied on every open---you are told when
+an existing loose directory is tightened), the documents inside it, the
+database, the backups and exports, and the @file{-journal},
+@file{-wal} and @file{-shm} files SQLite keeps beside the database.
+Those sidecar files are created while the process umask is narrowed, so
+they are private from the instant they exist, instead of needing a
+@command{chmod} that would come too late.
+
+On MS-Windows none of that means anything: Emacs maps @code{chmod} to
+the read-only attribute there, so Niori performs no mode changes at all
+and leaves protection to the NTFS permissions of the directory---which
+is why the default is the per-user @file{%LOCALAPPDATA%} folder rather
+than @file{~/.local}.
+
+If you share the directory on purpose,
+@code{niori-store-tighten-data-directory} decides what happens:
+
+@table @asis
+@item @code{t} (default)
+re-apply mode @code{0700} on open and say so in one line;
+@item @code{advise}
+keep your modes, report once per session and name the fix;
+@item @code{nil}
+keep your modes, say nothing.
+@end table
+
+@noindent
+In the latter two cases, @kbd{M-x niori-store-secure-data-directory}
+fixes the tree on demand, regardless of the policy.  It never follows
+symbolic links, so a document imported with the opt-in @code{symlink}
+method keeps the permissions of the file you own elsewhere.  A
+deliberately shared folder---a family NAS, a group-readable backup
+volume---can therefore stay shared without being silently overridden on
+every open.
+
+Write-ahead logging is deliberately not enabled: the data directory is
+meant to be synced as a whole, and a live @file{-wal} file on a
+Syncthing or network folder is a corruption source rather than a
+performance win.
+
+@node Revisions and audit trail
+@section Revisions and audit trail
+
+@cindex revisions
+@cindex audit trail
+Medical data is edited rarely, but mistakes matter.  Every update or
+delete first snapshots the previous record, as JSON, into the
+@code{revisions} table: a real audit trail inside the same database
+file, at the cost of one JSON write per change.  The behaviour is
+controlled by @code{niori-store-keep-revisions} (default @code{t}).
+
+To inspect a change, @kbd{D} in a roster or @kbd{C-c M D} diffs the
+record against its previous revision with @code{ediff}
+(@pxref{History and revisions}).
+
+@node Backups and relocation
+@section Backups and relocation
+
+@cindex relocation
+@findex niori-store-switch-data-directory
+@kbd{C-c M b} writes a timestamped copy of the database into
+@file{backups/} (@pxref{Backups}); keep a copy on offline media.
+Because attaching copies files by default, the data directory is a
+complete copy of the record, and ``back up this folder'' is sufficient
+advice.
+
+Moving an installation is a directory move plus @kbd{M-x
+niori-store-switch-data-directory}: the command closes the connection,
+re-points @code{niori-data-directory}, reopens the database (running
+migrations) and refreshes open buffers.  It asks before adopting a
+folder that holds no Niori data yet, and keeps using the old directory
+if the new one cannot be opened.
+
+@node Attachment safety
+@section Attachment safety
+
+@cindex attachments, safety
+Documents are treated with care:
+
+@itemize @bullet
+@item
+Paths are stored relative to the documents directory, and expanding a
+stored path refuses anything that would escape it, so a hand-edited row
+cannot turn into an arbitrary file read.
+@item
+Attaching @emph{copies} the file by default (the original stays where
+it was); @code{niori-attachments-import-method} allows @code{move} and
+@code{symlink} for large scans, at the cost of no longer being
+self-contained.
+@item
+Detaching asks before removing a file, and never removes one another
+row still points at.
+@item
+Deleting a @emph{record} asks first and keeps the files.
+@kbd{M-x niori-attachments-check} lists missing files and documents
+orphaned by a deleted record; @kbd{M-x niori-attachments-purge-orphans}
+cleans the orphans up.
+@end itemize
+
+@node Encryption
+@section Encryption
+
+@cindex encryption
+The Org export can be encrypted with EasyPG: invoke it with a prefix
+argument, @kbd{C-u C-c M E o}, and it is encrypted to the keys in
+@code{niori-encryption-recipients}.  The @command{gpg} prerequisite is
+listed in @ref{Requirements}.
+
+If you keep narrative notes in Org files instead, the built-in
+@code{org-crypt} encrypts subtrees on save---Niori stays out of the way
+of both styles.
+
+@node Network access
+@section Network access
+
+@cindex privacy
+@cindex network
+Nothing leaves your machine unless you call the FHIR client.  There is
+no telemetry and no sync service; the data directory is offline by
+default.
+
+For FHIR retrieval, set @code{niori-fhir-server-url} to the server's
+base URL and keep the bearer token in @code{auth-source}---a line like
+the following in @file{.authinfo}:
+
+@example
+machine fhir.example.com secret TOKEN
+@end example
+
+@noindent
+Then @kbd{M-x niori-fhir-fetch} issues authenticated requests with the
+built-in @code{url} library and returns parsed JSON
+(@pxref{FHIR interoperability}).
+
+@node Schema migrations
+@section Schema migrations
+
+@cindex schema migrations
+Schema changes run through numbered migrations recorded in the
+@code{schema_migrations} table.  A new version upgrades the database in
+place; new tables appear on the next open without a migration
+(@pxref{Upgrading}).  Table and column names come exclusively from the
+schema registry, and values are always bound parameters, so the query
+surface is injection-safe.
+
 @node Troubleshooting
 @chapter Troubleshooting
 
 This chapter covers common problems and their solutions.
+
+@menu
+* No SQLite support::
+* Offline fallback::
+* Permission warnings::
+* Documents will not open::
+* Spell-checking does not start::
+* Encrypted export fails::
+* FHIR retrieval fails::
+* Orphaned attachments::
+* Key binding conflicts::
+* Restoring a database::
+@end menu
+
+@node No SQLite support
+@section No SQLite support
+
+Niori needs Emacs 29.1 or later built with SQLite support.  That is the
+default on major distributions, and Niori checks at startup and tells
+you if the binding is missing.  Install an Emacs build with SQLite
+support (@pxref{Requirements}) and Niori will open its database.
+
+@node Offline fallback
+@section Offline fallback
+
+If the standalone application starts with plain themes and simple
+completion, it could not reach GNU ELPA.  This is deliberate: every
+optional package is guarded, and the application must start on a bare,
+offline Emacs.  The first run installs @code{vertico},
+@code{consult}, @code{orderless} and @code{which-key} when online; set
+@env{NIORI_NO_NET} to @code{1} to always start offline (@pxref{Environment
+variables}).  On a degraded start you still get Modus themes with
+day/night switching, @code{fido-vertical-mode} and plain keymap help.
+
+@node Permission warnings
+@section Permission warnings
+
+If Niori reports a loose data directory on open, either let it tighten
+the directory (the default, @code{niori-store-tighten-data-directory}
+@code{t}), or, if you share the directory on purpose, set the option to
+@code{advise} or @code{nil} and run @kbd{M-x
+niori-store-secure-data-directory} whenever you want it fixed
+(@pxref{File permissions}).
+
+@node Documents will not open
+@section Documents will not open
+
+PDFs open with @code{doc-view} and images with @code{image-mode}; other
+formats (DOCX, XLSX, @dots{}) go to the external opener: the program in
+@code{niori-attachments-external-opener}, which defaults to
+@command{xdg-open} on GNU/Linux, @command{open} on macOS, and
+@code{w32-shell-execute} on MS-Windows.  If nothing happens, check that
+the opener matches your system (@pxref{Variable reference}).
+
+@node Spell-checking does not start
+@section Spell-checking does not start
+
+Letters are spell-checked with @code{flyspell} only when a
+@command{hunspell} or @command{aspell} binary exists;
+@code{niori-letter-flyspell} defaults to @code{auto}, which enables
+checking only in that case (@pxref{Visits and letters}).  Install
+either binary to get spell-checking.
+
+@node Encrypted export fails
+@section Encrypted export fails
+
+Encrypted Org export needs two things: @command{gpg} installed, and at
+least one key in @code{niori-encryption-recipients}.  Remember that
+encryption is requested with a prefix argument (@kbd{C-u C-c M E o});
+without it, the export is written in plain Org (@pxref{Encryption}).
+
+@node FHIR retrieval fails
+@section FHIR retrieval fails
+
+@kbd{M-x niori-fhir-fetch} needs @code{niori-fhir-server-url} and a
+bearer token in @code{auth-source} for the server's host: a
+@file{.authinfo} line such as @code{machine fhir.example.com secret
+TOKEN} (@pxref{Network access}).
+
+@node Orphaned attachments
+@section Orphaned attachments
+
+Deleting a record keeps its files on purpose (@pxref{Attachment
+safety}), so documents can outlive their record.  @kbd{M-x
+niori-attachments-check} lists missing files and orphans; @kbd{M-x
+niori-attachments-purge-orphans} removes the orphans.  Files still
+referenced by another record are never removed.
+
+@node Key binding conflicts
+@section Key binding conflicts
+
+The @kbd{C-c M} prefix was chosen to avoid collisions with other
+packages that use popular prefixes (for instance @kbd{C-c n}, used by
+deft).  @code{niori-mode} is a global minor mode with zero footprint
+until you run @kbd{M-x niori}.  If another package shadows one of the
+bindings, @kbd{C-c M C-h} shows the full keymap overview
+(@pxref{Starting out}).
+
+@node Restoring a database
+@section Restoring a database
+
+@kbd{C-c M b} writes timestamped copies into @file{backups/}
+(@pxref{Backups}).  To restore one, close the database first with
+@kbd{M-x niori-store-close}, copy the backup over @file{niori.db} in
+the data directory, and start Niori again.
+
+@node Index
+@unnumbered Index
+
+@printindex ky
+@printindex vr
+@printindex fn
+@printindex cp
 
 @bye
