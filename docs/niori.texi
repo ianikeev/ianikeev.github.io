@@ -32,6 +32,13 @@ This manual documents Niori, a medical information manager.
 Niori is a medical information manager. This manual documents its
 installation, configuration, features and operation.
 
+If Emacs is new to you, start with @ref{Introduction to the Emacs way}
+(Appendix A): it explains how the key bindings in this manual are
+written, the words Emacs uses for everyday things, and what GPG and
+EasyPG are.  If you are already familiar with Emacs, you can skip this
+appendix.  For more about Emacs itself, see
+@uref{https://www.gnu.org/software/emacs/, the GNU Emacs web site}.
+
 @insertcopying
 
 @menu
@@ -84,12 +91,12 @@ free software under GPL-3.0-or-later, uses lexical binding everywhere
 and depends on GNU ELPA packages only.  This manual describes version
 0.1.0 of niori.el.
 
-If Emacs is new to you, start with @ref{Introduction to the Emacs
-way} (Appendix A): it explains how the key bindings in this manual
-are written, the words Emacs uses for everyday things, and what GPG
-and EasyPG are.  Everyone else can skip it.  For more about Emacs
-itself, see @uref{https://www.gnu.org/software/emacs/, the GNU Emacs
-web site}.
+If Emacs is new to you, start with @ref{Introduction to the Emacs way}
+(Appendix A): it explains how the key bindings in this manual are
+written, the words Emacs uses for everyday things, and what GPG and
+EasyPG are.  If you are already familiar with Emacs, you can skip this
+appendix.  For more about Emacs itself, see
+@uref{https://www.gnu.org/software/emacs/, the GNU Emacs web site}.
 
 @node Features
 @section Features
