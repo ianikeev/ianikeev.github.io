@@ -172,15 +172,32 @@ if (!body) {
 writeFileSync(includeOutput, `${body[1].trim()}\n`, 'utf8');
 
 const standaloneManual = join(
-	root,
-	'_source',
-	'documentation',
-	'niori',
-	'index.html',
+    root,
+    '_source',
+    'documentation',
+    'niori',
+    'index.html',
 );
 
 mkdirSync(dirname(standaloneManual), { recursive: true });
-copyFileSync(htmlOutput, standaloneManual);
+
+writeFileSync(
+    standaloneManual,
+    `---
+title: Niori documentation
+description: Documentation for the Niori medical information manager.
+layout: base.html
+permalink: /documentation/niori/
+---
+
+<main class="grid">
+  <article class="line-length-lg niori-manual">
+    {% include "niori-manual.html" %}
+  </article>
+</main>
+`,
+    'utf8',
+);
 
 generateOtherDocumentsInclude();
 

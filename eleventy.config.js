@@ -41,7 +41,6 @@ export default async function (eleventyConfig) {
 	eleventyConfig.addPassthroughCopy('_source/site.webmanifest');
 	eleventyConfig.addPassthroughCopy('_source/favicon.ico');
 	eleventyConfig.addPassthroughCopy('_source/assets/downloads');
-	eleventyConfig.addPassthroughCopy('_source/documentation/niori');
 
 	eleventyConfig.amendLibrary('md', (mdLib) => {
 		mdLib.use(footnotePlugin);
