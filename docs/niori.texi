@@ -41,6 +41,7 @@ installation, configuration, features and operation.
 * Configuration::
 * Data and Privacy::
 * Troubleshooting::
+* Introduction to the Emacs way::
 * Index::
 @end menu
 
@@ -68,10 +69,7 @@ appointments, abnormal results and boosters that are due.  The reports
 and scans behind those records (PDF, DOCX, images) live in the same
 data directory, attached to the record they belong to.
 
-Niori is an Emacs port of the niori Common Lisp/CLOG application
-(@uref{https://github.com/ianikeev/niori}) and keeps its
-NetBeans-Platform-style module architecture, translated to Emacs
-idioms.  Rather than reimplementing UI toolkits, it composes the
+Rather than reimplementing UI toolkits, it composes the
 platform Emacs already provides: @code{tabulated-list-mode} rosters,
 @code{widget} forms, the built-in @code{sqlite} binding, Modus themes
 and transient menus.
@@ -85,6 +83,13 @@ can diff with @code{ediff} (@pxref{History and revisions}).  Niori is
 free software under GPL-3.0-or-later, uses lexical binding everywhere
 and depends on GNU ELPA packages only.  This manual describes version
 0.1.0 of niori.el.
+
+If Emacs is new to you, start with @ref{Introduction to the Emacs
+way} (Appendix A): it explains how the key bindings in this manual
+are written, the words Emacs uses for everyday things, and what GPG
+and EasyPG are.  Everyone else can skip it.  For more about Emacs
+itself, see @uref{https://www.gnu.org/software/emacs/, the GNU Emacs
+web site}.
 
 @node Features
 @section Features
@@ -246,7 +251,7 @@ installed automatically; @code{package.el} users who prefer
 @cindex installation, standalone
 @cindex standalone application
 Niori can run as a full application on a stock, configuration-free
-Emacs (@code{emacs -Q}):
+Emacs (@code{emacs -Q}; @pxref{Running without an init file}):
 
 @example
 git clone https://github.com/ianikeev/niori.el
@@ -283,7 +288,8 @@ The first time Niori opens its database, it creates the data directory
 marker) and the SQLite file inside it, then runs any pending migrations
 (@pxref{Schema migrations}).  The database starts empty: there is no
 seed data.  Open the dashboard with @kbd{M-x niori} and add your first
-record (@pxref{Starting out}).
+record (@pxref{Starting out}).  If Emacs is new to you, read the
+survival kit in @ref{A survival kit} first.
 
 @node Upgrading
 @section Upgrading
@@ -991,7 +997,9 @@ cleans the orphans up.
 The Org export can be encrypted with EasyPG: invoke it with a prefix
 argument, @kbd{C-u C-c M E o}, and it is encrypted to the keys in
 @code{niori-encryption-recipients}.  The @command{gpg} prerequisite is
-listed in @ref{Requirements}.
+listed in @ref{Requirements}; what GPG and EasyPG actually are is
+explained in @ref{GPG and EasyPG}, written for readers meeting them
+for the first time.
 
 If you keep narrative notes in Org files instead, the built-in
 @code{org-crypt} encrypts subtrees on save---Niori stays out of the way
@@ -1139,6 +1147,245 @@ bindings, @kbd{C-c M C-h} shows the full keymap overview
 (@pxref{Backups}).  To restore one, close the database first with
 @kbd{M-x niori-store-close}, copy the backup over @file{niori.db} in
 the data directory, and start Niori again.
+
+@node Introduction to the Emacs way
+@appendix Introduction to the Emacs Way
+
+@cindex Emacs, introduction
+This appendix is for readers who have never used Emacs---perhaps you
+are coming to Niori as a standalone application, on a computer where
+Emacs was installed mainly to run it (@pxref{Installing as a standalone
+application}).  It explains how the key bindings in this manual are
+written, the small set of keys that gets you out of trouble, the words
+Emacs uses for everyday things, and what GPG and EasyPG are.  If you
+have used Emacs before, skip this appendix.
+
+@menu
+* How key bindings are written::
+* A survival kit::
+* Words Emacs uses::
+* GPG and EasyPG::
+* Running without an init file::
+@end menu
+
+@node How key bindings are written
+@section How key bindings are written
+
+@cindex key notation
+@cindex Control key
+@cindex Meta key
+Commands in this manual are written as key sequences.  @kbd{C-} means
+the @dfn{Control} key: @kbd{C-x} is ``hold Control and type
+x''.  @kbd{M-} means @dfn{Meta}: on most keyboards that is the Alt
+key, and on keyboards without one, pressing and releasing Esc before
+the key works as a substitute.  @kbd{M-x} is therefore ``hold Alt and
+type x''.
+
+A sequence of several elements is typed in order, one after another.
+@kbd{C-c M b}, Niori's backup command, means: hold Control and type
+c, release everything, then hold Alt and type b.  Within one element
+the keys are held together; between elements they are not.
+
+Letters matter exactly as written: @kbd{C-a} and @kbd{C-A} are
+different bindings, and @kbd{C-A} means Control with a @emph{shifted}
+A.  A few keys have names instead of symbols: @key{RET} is the Enter
+key, @key{SPC} the space bar, @key{TAB} the Tab key.  Where this
+manual writes @kbd{M-x customize-group RET niori RET}, you type
+@kbd{M-x}, the word @code{customize-group}, press @key{RET}, type
+@code{niori} and press @key{RET} again.
+
+@cindex running commands by name
+@cindex prefix argument
+@kbd{M-x} deserves a second look, because every Niori command can be
+reached through it: @kbd{M-x} asks for a command name in the
+minibuffer (@pxref{Words Emacs uses}), and @key{RET} runs it.  A
+prefix argument modifies the command that follows: @kbd{C-u C-c M E o}
+asks the Org export to encrypt itself (@pxref{Exporting data}).
+
+@cindex help, built-in
+Emacs documents itself.  @kbd{C-h k} asks ``what does this key do?'',
+@kbd{C-h m} describes the current buffer and lists every key binding
+active in it, and @kbd{C-h t} starts the built-in tutorial.  Inside
+Niori, @kbd{C-c M C-h} shows all Niori bindings at once
+(@pxref{Starting out}).
+
+@node A survival kit
+@section A survival kit
+
+@cindex survival commands
+Ten keys answer almost every first-day question.  None of them are
+Niori's; they belong to Emacs everywhere.
+
+@table @kbd
+@item C-g
+@cindex cancel a command
+Quit whatever is happening: a half-typed key sequence, a minibuffer
+prompt, a search, a hung command.  When in doubt, type @kbd{C-g}.
+@item C-x C-c
+Leave Emacs.
+@item C-x C-f
+@cindex open a file
+Open a file: Emacs asks for its name in the minibuffer.  Use this to
+look at an exported Org or CSV file.
+@item C-x C-s
+Save the current buffer to its file.
+@item C-/
+@cindex undo
+Undo the last change (@kbd{C-x u} also works).
+@item C-s
+@cindex search
+Search forward in the buffer; @kbd{C-r} searches backwards.  @key{RET}
+stops the search where you are.
+@item C-v
+Scroll down a screenful; @kbd{M-v} scrolls up.  The @key{PgDn} and
+@key{PgUp} keys do the same.
+@item M-x
+Run any command by name (@pxref{How key bindings are written}).  Every
+@code{niori-} command mentioned in this manual works here, including
+those without a key binding.
+@item C-h k
+Ask what a key does: type the key after @kbd{C-h k} and Emacs shows
+its documentation.
+@item C-h t
+The Emacs tutorial: half an hour that repays itself for the rest of
+the week.
+@end table
+
+@node Words Emacs uses
+@section Words Emacs uses
+
+@cindex Emacs vocabulary
+Emacs calls everyday things by names of its own.  These recur
+throughout the manual:
+
+@table @dfn
+@item Buffer
+The content you edit or read---a file, a roster, a form, the
+dashboard.  Niori's rosters, forms and detail views are buffers.
+@item Window
+A pane showing one buffer.  Emacs's @dfn{frame} is what your desktop
+calls a window; a @dfn{window} in Emacs is one pane of it, and Emacs
+shows several buffers side by side by splitting the frame into
+windows.
+@item Point
+The cursor.  Commands act at point: in a roster, @kbd{RET} opens the
+record under point (@pxref{Rosters}).
+@item Minibuffer
+@cindex minibuffer
+@cindex echo area
+The prompt area at the bottom of the frame, where Emacs asks questions
+and accepts command names after @kbd{M-x}.  @key{RET} confirms and
+@kbd{C-g} cancels.  One-line messages appear next to it, in the
+@dfn{echo area}.
+@item Mode
+The active behaviour of a buffer.  A @dfn{major mode} says what the
+buffer is---a @code{tabulated-list-mode} roster, @code{doc-view} for a
+PDF---and @dfn{minor modes} layer extra behaviour on top.
+@code{niori-mode} is a @emph{global} minor mode, active in every
+buffer, which is why @kbd{C-c M} works everywhere (@pxref{Starting
+out}).
+@item Keymap
+@cindex keymap
+The table that connects a key to a command; one connection is a
+@dfn{key binding}.  Prefix keys like @kbd{C-c M} select a whole
+sub-table: the @kbd{b} in @kbd{C-c M b} is looked up inside Niori's
+own keymap.
+@item Init file
+@cindex init file
+The personal startup script Emacs runs at launch
+(@file{~/.emacs.d/init.el} or @file{~/.emacs}), where @code{setq} and
+@code{use-package} lines go.  The standalone application runs
+@emph{without} one (@pxref{Running without an init file}).
+@item Customize
+The built-in settings browser: @kbd{M-x customize-group RET niori RET}
+lists every Niori option with descriptions and types
+(@pxref{Customizing Niori}).
+@item Package
+@cindex packages
+@cindex GNU ELPA
+@cindex MELPA
+An installable extension.  GNU ELPA is the GNU archive Emacs installs
+from by default; MELPA is a popular community archive.  Niori depends
+on GNU ELPA packages only (@pxref{Requirements}).
+@item Completion
+@cindex completion
+While you type in the minibuffer, Emacs offers matching choices and
+@key{RET} picks one.  The standalone application installs
+@code{vertico}, @code{consult} and @code{orderless} for this
+(@pxref{Optional integrations}).
+@end table
+
+@node GPG and EasyPG
+@section GPG and EasyPG
+
+@cindex GPG
+@cindex EasyPG
+@cindex key pair
+@cindex passphrase
+@cindex gpg-agent
+Two names appear wherever Niori encrypts something (@pxref{Encryption}).
+
+@dfn{GPG}, the GNU Privacy Guard, is the free OpenPGP implementation:
+a command-line program, @command{gpg}, that encrypts data to key
+pairs.  A @dfn{key pair} has a public half, which you may publish and
+which others encrypt @emph{to} you, and a secret half, protected by a
+@dfn{passphrase}, which decrypts.  You generate a pair with
+@command{gpg --full-generate-key} and list the ones you have with
+@command{gpg --list-keys}; each is identified by a name and an e-mail
+address.  The @code{niori-encryption-recipients} option holds such
+identifiers: an encrypted export is encrypted to those public keys, so
+only someone holding the matching secret keys---you, or a person you
+chose---can read it.  A small helper program, @command{gpg-agent},
+remembers the passphrase for a while, so you need not retype it.
+
+@dfn{EasyPG} is the Emacs side of the same machinery, built into
+Emacs.  The EasyPG Assistant manages keys interactively (@kbd{M-x
+epa-list-keys}), and @code{epa-file} makes Emacs treat any file whose
+name ends in @file{.gpg} transparently: it decrypts on open,
+re-encrypts on save, and asks for the passphrase in the minibuffer
+when @command{gpg-agent} does not still have it.  Niori's encrypted
+export simply hands the file to this layer: open the export in Emacs
+and you are reading it; @command{gpg --decrypt} does the same outside
+Emacs.
+
+@node Running without an init file
+@section Running without an init file
+
+@cindex init file, skipping
+@cindex emacs -Q
+Emacs normally runs your init file at startup: themes, fonts, key
+tweaks and installed packages---everything you have put there.  The
+@code{-Q} flag, short for ``quick'', starts Emacs without it: no
+personal init file, no site-wide one, no X resources.  You get a
+pristine, stock editor session that behaves the same on every machine
+and every run.
+
+That is exactly how Niori's standalone launcher works
+(@pxref{Installing as a standalone application}): @command{bin/niori}
+starts such a stock Emacs, loads Niori into it and lets you open the
+dashboard with @kbd{M-x niori}, so the application never
+inherits---and never touches---any personal configuration.  Two
+practical consequences:
+
+@itemize @bullet
+@item
+What persists between runs is your data---the data directory
+(@pxref{The data directory})---not settings.  To point the standalone
+application at a particular data directory, or to keep it offline, set
+the environment variables @env{NIORI_DATA_DIR} and @env{NIORI_NO_NET}
+(@pxref{Environment variables}); there is no init file to set options
+in.
+@item
+Options you change interactively---@kbd{M-x customize-group RET niori
+RET}, @kbd{M-x cua-mode} for cut/copy/paste keys (@pxref{Starting
+out})---last for the session only.  If you later move Niori into your
+own Emacs, the same settings belong in the init file instead
+(@pxref{Customizing Niori}).
+@end itemize
+
+@noindent
+If a first contact with Emacs itself feels rough, @kbd{C-h t} (the
+tutorial) and the survival kit above are the shortest way in.
 
 @node Index
 @unnumbered Index
