@@ -1,0 +1,43 @@
+---
+title: "Graphics"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Graphics.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Graphics">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Images.html" rel="next">Images</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Text-and-Fonts.html#Text-and-Fonts" rel="prev">Text and Fonts</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Graphics-1"><span>7 Graphics<a class="copiable-link" href="#Graphics-1"> &para;</a></span></h2>
+
+<p>All operators append to the current page&rsquo;s content stream.  The names
+mirror cl-pdf:
+</p>
+<div class="example">
+<pre class="example-preformatted">niori-pdf-move-to / niori-pdf-line-to / niori-pdf-curve-to
+niori-pdf-close-path / niori-pdf-rectangle / niori-pdf-circle
+niori-pdf-ellipse / niori-pdf-arc / niori-pdf-polyline
+niori-pdf-stroke / niori-pdf-close-stroke / niori-pdf-fill
+niori-pdf-fill-stroke / niori-pdf-clip
+niori-pdf-set-line-width / niori-pdf-set-dash-pattern
+niori-pdf-set-rgb-fill / niori-pdf-set-rgb-stroke
+niori-pdf-set-gray-fill / niori-pdf-set-gray-stroke
+niori-pdf-set-cmyk-fill / niori-pdf-set-cmyk-stroke
+niori-pdf-set-color-fill / niori-pdf-set-color-stroke  <span class="r">named colors</span>
+niori-pdf-set-fill-alpha / niori-pdf-set-stroke-alpha   <span class="r">transparency</span>
+niori-pdf-translate / niori-pdf-rotate / niori-pdf-scale
+niori-pdf-skew / niori-pdf-transform
+niori-pdf-with-saved-state  <span class="r">macro: q/Q around the body</span>
+niori-pdf-draw-text / niori-pdf-draw-text-at
+niori-pdf-draw-centered-text / niori-pdf-draw-right-text
+niori-pdf-add-uri-link / niori-pdf-add-link
+</pre></div>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Images.html" rel="next">Images</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Text-and-Fonts.html#Text-and-Fonts" rel="prev">Text and Fonts</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

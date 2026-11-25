@@ -1,0 +1,33 @@
+---
+title: "Glyph Outlines"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Glyph-Outlines.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Glyph-Outlines">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="PDF_002fA.html" rel="next">PDF/A-2b archival output</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Charts.html" rel="prev">Charts</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Glyph-Outlines-1"><span>15 Glyph Outlines<a class="copiable-link" href="#Glyph-Outlines-1"> &para;</a></span></h2>
+
+<p><code class="code">niori-pdf-glyphs.el</code> extracts the outline contours of a glyph
+from a TrueType (<samp class="file">glyf</samp>) or CFF/OpenType (<samp class="file">CharStrings</samp>)
+font and draws them with path primitives.  This is the port of
+cl-pdf&rsquo;s glyph rendering; it is handy for watermark-style decorative
+lettering at any size.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002ddraw_002dglyph_002doutline"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-draw-glyph-outline</strong> <var class="def-var-arguments">font-file char x y size &amp;key fill stroke line-width</var><a class="copiable-link" href="#index-niori_002dpdf_002ddraw_002dglyph_002doutline"> &para;</a></span></dt>
+<dd><p>Draw the outline of <var class="var">char</var> from <var class="var">font-file</var> (a .ttf or .otf
+path) with its baseline at (<var class="var">x</var>, <var class="var">y</var>) scaled to <var class="var">size</var>
+points.  <var class="var">fill</var>/<var class="var">stroke</var> are RGB lists or nil.
+</p></dd></dl>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="PDF_002fA.html" rel="next">PDF/A-2b archival output</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Charts.html" rel="prev">Charts</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

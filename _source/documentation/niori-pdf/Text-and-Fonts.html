@@ -1,0 +1,134 @@
+---
+title: "Text and Fonts"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Text-and-Fonts.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Text-and-Fonts">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Graphics.html" rel="next">Graphics</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Documents.html" rel="prev">Documents and pages</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Text-and-Fonts-1"><span>6 Text and Fonts<a class="copiable-link" href="#Text-and-Fonts-1"> &para;</a></span></h2>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dset_002dfont"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-set-font</strong> <var class="def-var-arguments">name size</var><a class="copiable-link" href="#index-niori_002dpdf_002dset_002dfont"> &para;</a></span></dt>
+<dd><p>Select the current font.  <var class="var">name</var> is one of:
+</p>
+<ul class="itemize mark-bullet">
+<li>a base-14 name (<code class="code">&quot;Helvetica&quot;</code>, <code class="code">&quot;Helvetica-Bold&quot;</code>,
+<code class="code">&quot;Helvetica-Oblique&quot;</code>, <code class="code">&quot;Helvetica-BoldOblique&quot;</code>,
+<code class="code">&quot;Times-Roman&quot;</code>, <code class="code">&quot;Times-Bold&quot;</code>, <code class="code">&quot;Times-Italic&quot;</code>,
+<code class="code">&quot;Times-BoldItalic&quot;</code>, <code class="code">&quot;Courier&quot;</code>, <code class="code">&quot;Courier-Bold&quot;</code>,
+<code class="code">&quot;Courier-Oblique&quot;</code>, <code class="code">&quot;Courier-BoldOblique&quot;</code>,
+<code class="code">&quot;Symbol&quot;</code>, <code class="code">&quot;ZapfDingbats&quot;</code>); drawn unembedded with the
+real Adobe AFM metrics,
+</li><li>a path to a <samp class="file">.ttf</samp> TrueType, <samp class="file">.otf</samp>
+OpenType/CFF or <samp class="file">.ttc</samp> TrueType collection file, which is
+parsed, subsetted and embedded,
+</li><li>a path to a <samp class="file">.pfb</samp> or <samp class="file">.pfa</samp> Type 1 font file, which
+is embedded whole with a <code class="code">/FontFile</code> stream
+(see <a class="pxref" href="#Type-1-fonts">Type 1 fonts (.pfb/.pfa)</a>),
+</li><li>a plist <code class="code">(:file PATH :index N)</code> selecting member <var class="var">N</var>
+(0-based) of a TrueType collection.
+</li></ul>
+</dd></dl>
+
+<h4 class="subheading" id="Base_002d14-fonts"><span>Base-14 fonts<a class="copiable-link" href="#Base_002d14-fonts"> &para;</a></span></h4>
+<p>The base-14 fonts are drawn from the real Adobe AFM metrics (embedded in
+<samp class="file">niori-pdf-metrics.el</samp>, generated from the freely redistributable
+core-14 AFM files).  Text is encoded with <code class="code">WinAnsiEncoding</code>
+(Latin-1 plus the Windows special characters such as the euro sign,
+smart quotes and dashes).  Characters without a WinAnsi mapping are
+drawn as &lsquo;<samp class="samp">?</samp>&rsquo;.
+</p>
+<h4 class="subheading" id="TrueType_002c-OpenType_002fCFF-and-TrueType-collections"><span>TrueType, OpenType/CFF and TrueType collections<a class="copiable-link" href="#TrueType_002c-OpenType_002fCFF-and-TrueType-collections"> &para;</a></span></h4>
+<p><code class="code">niori-pdf-set-font</code> accepts <samp class="file">.ttf</samp>, <samp class="file">.otf</samp> and
+<samp class="file">.ttc</samp> paths.  TrueType and OpenType/CFF fonts are parsed (cmap
+formats 0/4/6/12, head, hhea, maxp, hmtx, loca, glyf, name, post,
+OS/2), a glyph subset covering exactly the characters you draw is
+built (composite glyphs are closed transitively, original glyph ids
+are retained) and the result is embedded as a <code class="code">Type0</code> /
+<code class="code">CIDFontType2</code> (TrueType) or <code class="code">CIDFontType0</code> (CFF) font with
+<code class="code">Identity-H</code> encoding and a <code class="code">ToUnicode</code> CMap, so text
+extraction keeps working.  Missing glyphs fall back to
+<code class="code">.notdef</code>.
+</p>
+<p>A <samp class="file">.ttc</samp> TrueType collection packs several fonts into one file;
+niori-pdf reads the member selected by <var class="var">index</var> (default 0).  Use
+<code class="code">niori-pdf-ttf-collection-fonts</code> to list the members and pass a
+plist spec to choose one:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(niori-pdf-ttf-collection-fonts &quot;/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc&quot;)
+  <span class="r">&rArr; ((0 &quot;WenQuanYiZenHei&quot; &quot;WenQuanYi Zen Hei&quot;)
+           (1 &quot;WenQuanYiZenHeiMono&quot; &quot;WenQuanYi Zen Hei Mono&quot;)
+           (2 &quot;WenQuanYiZenHeiSharp&quot; &quot;WenQuanYi Zen Hei Sharp&quot;))</span>
+
+;; draw with the second member of the collection:
+(niori-pdf-set-font '(:file &quot;/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc&quot;
+                      :index 1)
+                    12)
+</pre></div>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dttf_002dcollection_002dfonts"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-ttf-collection-fonts</strong> <var class="def-var-arguments">path</var><a class="copiable-link" href="#index-niori_002dpdf_002dttf_002dcollection_002dfonts"> &para;</a></span></dt>
+<dd><p>List the fonts of the TrueType collection at <var class="var">path</var>.  Returns a
+list of <code class="code">(INDEX PS-NAME FAMILY)</code>.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dtext_002dwidth"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-text-width</strong> <var class="def-var-arguments">string font &amp;optional size</var><a class="copiable-link" href="#index-niori_002dpdf_002dtext_002dwidth"> &para;</a></span></dt>
+<dd><p>Width of <var class="var">string</var> in points at <var class="var">size</var>, using the same metrics
+the viewer will use.  This is the measurement primitive of the flow
+engine.  <var class="var">font</var> may be a font object, a base-14 name, a font file
+path or a <code class="code">(:file :index)</code> collection spec.
+</p></dd></dl>
+
+<ul class="mini-toc">
+<li><a href="#Type-1-fonts">Type 1 fonts (.pfb/.pfa)</a></li>
+</ul>
+<hr>
+<div class="section-level-extent" id="Type-1-fonts">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="#Text-and-Fonts" rel="up">Text and Fonts</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h3 class="section" id="Type-1-fonts-_0028_002epfb_002f_002epfa_0029"><span>6.1 Type 1 fonts (.pfb/.pfa)<a class="copiable-link" href="#Type-1-fonts-_0028_002epfb_002f_002epfa_0029"> &para;</a></span></h3>
+
+<p>Type 1 font programs are embedded whole &mdash; no subsetting (Type 1
+subsetting would mean rewriting the private dictionary; the fonts are
+small anyway).  The parser handles both container formats: the binary
+<samp class="file">.pfb</samp> segment structure (<code class="code">0x80 0x01</code> ASCII,
+<code class="code">0x80 0x02</code> binary, <code class="code">0x80 0x03</code> EOF markers, with the
+post-eexec hex trailer mapped to <code class="code">/Length3</code>) and the ASCII
+<samp class="file">.pfa</samp> form (clear text up to the <code class="code">eexec</code> line, then
+hex-encoded binary).
+</p>
+<p>No companion <samp class="file">.afm</samp> file is needed: niori-pdf decrypts the
+<code class="code">eexec</code> section (key 55665) and reads the advance width of every
+glyph directly from the <code class="code">/CharStrings</code> charstrings (key 4330,
+the first two operands of <code class="code">hsbw</code>), so the PDF <code class="code">/Widths</code>
+array and the measurement metrics are derived from the font program
+itself.  The result is a <code class="code">/Subtype /Type1</code> font with
+<code class="code">/Encoding /WinAnsiEncoding</code> and a <code class="code">/FontDescriptor</code>
+carrying <code class="code">/FontName</code>, <code class="code">/FontBBox</code>, <code class="code">/ItalicAngle</code>,
+<code class="code">/CapHeight</code>, <code class="code">/StemV</code> (from the private
+<code class="code">/StdVW</code>) and the standard flags (fixed-pitch, italic).
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">;; URW Nimbus Roman, metric-compatible with Times-Roman:
+(niori-pdf-set-font
+ &quot;/usr/share/fonts/X11/Type1/NimbusRoman-Regular.pfb&quot; 10.5)
+</pre></div>
+
+<p>Caveat: the text you draw is mapped through WinAnsiEncoding glyph
+names, so the font must contain the standard Latin glyph names
+(all the URW Base-35 fonts do).
+</p>
+</div>
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Graphics.html" rel="next">Graphics</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Documents.html" rel="prev">Documents and pages</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

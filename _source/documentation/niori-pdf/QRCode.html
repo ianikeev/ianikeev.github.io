@@ -1,0 +1,46 @@
+---
+title: "QRCode"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/QRCode.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="QRCode">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Charts.html" rel="next">Charts</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Barcodes.html" rel="prev">Barcodes and QR codes</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="QR-codes"><span>13 QR codes<a class="copiable-link" href="#QR-codes"> &para;</a></span></h2>
+
+<p><code class="code">niori-pdf-qrcode.el</code> is a full QR Code model 2 encoder
+(ISO/IEC 18004) written for niori-pdf - cl-pdf only draws a
+pre-computed matrix.  Features: byte mode (UTF-8, no ECI segment),
+versions 1-10, all four error correction levels, Reed-Solomon error
+correction over GF(256) with the proper block structure and
+interleaving, all eight mask patterns scored with the ISO penalty
+rules N1-N4, BCH(15,5) format information and BCH(18,6) version
+information for versions 7-10.  Every matrix emitted by the test
+suite round-trips through an independent QR decoder.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dqr_002dencode"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-qr-encode</strong> <var class="def-var-arguments">string &amp;key ecl version</var><a class="copiable-link" href="#index-niori_002dpdf_002dqr_002dencode"> &para;</a></span></dt>
+<dd><p>Return <code class="code">(MATRIX . VERSION)</code>; <var class="var">matrix</var> is a list of N lists
+of N integers (1 = dark, 0 = light), row 0 at the top.  <var class="var">ecl</var> is
+the symbol <code class="code">L</code>, <code class="code">M</code>, <code class="code">Q</code> or <code class="code">H</code> (default
+<code class="code">M</code>); <var class="var">version</var> forces a version 1-10, otherwise the
+smallest one that fits is used.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dbarcode_002dqr_002dstring"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-barcode-qr-string</strong> <var class="def-var-arguments">string x y &amp;rest keys</var><a class="copiable-link" href="#index-niori_002dpdf_002dbarcode_002dqr_002dstring"> &para;</a></span></dt>
+<dd><p>Encode <var class="var">string</var> and draw the symbol with its top-left module
+corner at (<var class="var">x</var>, <var class="var">y</var>).  Keys: <code class="code">:ecl :version
+:point-size :color</code>.  Returns <code class="code">(WIDTH HEIGHT VERSION)</code>.
+</p></dd></dl>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Charts.html" rel="next">Charts</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Barcodes.html" rel="prev">Barcodes and QR codes</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

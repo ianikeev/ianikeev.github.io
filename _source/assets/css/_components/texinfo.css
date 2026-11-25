@@ -1,0 +1,183 @@
+
+/* ----------------------------------------------------------------------------
+Texinfo manuals
+---------------------------------------------------------------------------- */
+
+.texinfo-manual {
+    max-width: var(--line-length-xl);
+    min-width: 0;
+
+    & > :first-child {
+        margin-block-start: 0;
+    }
+
+    & :is(h1, h2, h3, h4, h5, h6) {
+        scroll-margin-block-start: var(--space-lg);
+    }
+
+    & h1.top {
+        margin-block: var(--space-xl);
+        font-size: var(--font-size-xxxl);
+    }
+
+    & h2.chapter {
+        margin-block: var(--space-xl) var(--space-md);
+        font-size: var(--font-size-xxl);
+    }
+
+    & h3.section {
+        margin-block: var(--space-lg) var(--space-sm);
+        font-size: var(--font-size-xl);
+    }
+
+    & h4.subsection {
+        margin-block: var(--space-md) var(--space-xs);
+        font-size: var(--font-size-lg);
+    }
+
+    & :is(p, ul, ol, dl, pre, table) {
+        margin-block: var(--space-sm);
+    }
+
+    & ul,
+    & ol {
+        padding-inline-start: 1.75ch;
+    }
+
+    & ul {
+        list-style-type: square;
+    }
+
+    & li {
+        margin-block: 0.25em;
+    }
+
+    & dl {
+        display: grid;
+        grid-template-columns: max-content minmax(0, 1fr);
+        column-gap: var(--space-md);
+        row-gap: var(--space-xs);
+    }
+
+    & dt {
+        font-weight: var(--font-weight-xl);
+    }
+
+    & dd {
+        margin-inline-start: 0;
+    }
+
+    & pre,
+    & .example {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    & pre {
+        padding: var(--space-sm);
+        border-inline-start: var(--border-width-md) solid var(--color-border);
+        background: var(--color-bg-dark);
+    }
+
+    & :is(code, samp, kbd, tt) {
+        font-family: var(--font-family-code);
+        font-size: 0.9em;
+    }
+
+    & .nav-panel {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs) var(--space-sm);
+        padding-block: var(--space-sm);
+        border-block: var(--border-width-sm) solid var(--color-border);
+        font-family: var(--font-family-interface);
+        font-size: var(--font-size-xs);
+        line-height: var(--line-height-md);
+    }
+
+    & .nav-button {
+        display: inline;
+    }
+
+    & .contents {
+        padding: var(--space-sm);
+        background: var(--color-bg-dark);
+    }
+
+    & .contents ul {
+        margin-block: var(--space-xs);
+    }
+
+    & .copiable-link {
+        margin-inline-start: 0.25em;
+        font-size: 0.45em;
+        vertical-align: super;
+        text-decoration: none;
+        opacity: 0.4;
+        transition: opacity 0.1s ease;
+    }
+
+    & :is(h1, h2, h3, h4, h5, h6):hover .copiable-link,
+    & .copiable-link:focus-visible {
+        opacity: 1;
+    }
+
+    & table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        border-collapse: collapse;
+        border-block: var(--border-width-sm) solid var(--color-border);
+        font-size: var(--font-size-sm);
+    }
+
+    & :is(th, td) {
+        padding: var(--space-xs) var(--space-sm);
+        border-block-end: var(--border-width-sm) solid var(--color-border);
+        text-align: start;
+        vertical-align: top;
+    }
+
+    & th {
+        font-family: var(--font-family-interface);
+        font-weight: var(--font-weight-xl);
+    }
+
+    & hr {
+        margin-block: var(--space-lg);
+        border: 0;
+        border-block-start: var(--border-width-sm) solid var(--color-border);
+    }
+
+    & img,
+    & svg {
+        max-width: 100%;
+        height: auto;
+    }
+
+    & .footnote {
+        font-size: var(--font-size-sm);
+    }
+
+    & .printindex,
+    & .index-entries {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+}
+
+@media (max-width: 40rem) {
+    .texinfo-manual {
+        & dl {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        & dd {
+            margin-inline-start: var(--space-sm);
+        }
+
+        & .nav-panel {
+            gap: var(--space-xs);
+        }
+    }
+}

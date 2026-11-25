@@ -23,6 +23,12 @@ const pdfOutput = join(build, 'niori.pdf');
 const nioriPdfSource = join(docs, 'niori-pdf.texi');
 const nioriPdfBuild = join(build, 'niori-pdf');
 const nioriPdfHtml = join(nioriPdfBuild, 'html');
+const nioriPdfPages = join(
+        root,
+        '_source',
+        'documentation',
+        'niori-pdf',
+);
 const nioriPdfOutput = join(nioriPdfBuild, 'niori-pdf.pdf');
 
 const pdfScript = join(root, 'scripts', 'texi2styledpdf.sh');
@@ -83,6 +89,61 @@ function runPdfScript(sourceFile, workingDirectory, outputFile, manualName) {
 	}
 }
 
+function generateNioriPdfPages() {
+        rmSync(nioriPdfPages, { recursive: true, force: true });
+        mkdirSync(nioriPdfPages, { recursive: true });
+
+        for (const filename of readdirSync(nioriPdfHtml)) {
+                if (!filename.endsWith('.html')) {
+                        continue;
+                }
+
+                const html = readFileSync(
+                        join(nioriPdfHtml, filename),
+                        'utf8',
+                );
+
+                const title = html.match(/<title>(.*?)<\/title>/s)?.[1];
+                const body = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1];
+
+                if (!title || !body) {
+                        throw new Error(
+                                `Could not extract title or body from ${filename}`,
+                        );
+                }
+
+                const pageTitle = title.replace(
+                        /\s*\(niori-pdf:.*$/,
+                        '',
+                );
+
+                const permalink =
+                        filename === 'index.html'
+                                ? '/documentation/niori-pdf/'
+                                : `/documentation/niori-pdf/${filename}`;
+
+                const page = [
+                        '---',
+			`title: ${JSON.stringify(pageTitle)}`,
+                        'description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.',
+                        'layout: base.html',
+                        `permalink: ${permalink}`,
+                        '---',
+                        '',
+                        '<main class="grid">',
+                        '    <article class="line-length-lg texinfo-manual">',
+                        body.trim(),
+                        '    </article>',
+                        '</main>',
+                        '',
+                ].join('\n');
+
+                writeFileSync(join(nioriPdfPages, filename), page);
+        }
+
+        console.log('Generated niori-pdf Eleventy pages.');
+}
+
 function buildNioriPdf() {
         rmSync(nioriPdfHtml, { recursive: true, force: true });
 	mkdirSync(nioriPdfHtml, { recursive: true });
@@ -96,6 +157,8 @@ function buildNioriPdf() {
 		],
 		'niori-pdf HTML',
 	);
+
+	generateNioriPdfPages();
 
 	runPdfScript(
 		nioriPdfSource,

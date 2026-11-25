@@ -1,0 +1,89 @@
+---
+title: "PDF/A"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/PDF_002fA.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="PDF_002fA">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Customization.html" rel="next">Customization</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Glyph-Outlines.html" rel="prev">Glyph Outlines</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="PDF_002fA_002d2b-archival-output"><span>16 PDF/A-2b archival output<a class="copiable-link" href="#PDF_002fA_002d2b-archival-output"> &para;</a></span></h2>
+
+<p>PDF/A (ISO 19005) is the archival flavor of PDF: everything needed to
+render the file is embedded, so the document displays identically
+decades from now.  niori-pdf implements the pragmatic flavor,
+<strong class="strong">PDF/A-2b</strong> (level B, based on PDF 1.7): transparency, JPEG
+images and URI/GoTo link actions stay legal, and no structure tagging
+is required.  PDF/A-1 is deliberately not supported (it forbids
+transparency), nor is PDF/A-3 (it adds embedded files, which archival
+reports rarely need).
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dpdfa_002denable"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-pdfa-enable</strong> <var class="def-var-arguments">doc &amp;optional level</var><a class="copiable-link" href="#index-niori_002dpdf_002dpdfa_002denable"> &para;</a></span></dt>
+<dd><p>Enable PDF/A-2b output for <var class="var">doc</var>.  <var class="var">level</var> must be 2 (the
+default).  Registers the metadata/output-intent catalog extension and
+the annotation save hook; <code class="code">niori-pdf-save</code> then writes a
+<code class="code">%PDF-1.7</code> header and an <code class="code">/ID</code> trailer.  Returns
+<var class="var">doc</var>.  In flow documents, simply pass <code class="code">:pdfa t</code> to
+<code class="code">niori-pdf-with-flow-document</code> instead of calling this
+function.
+</p></dd></dl>
+
+<p>What changes when PDF/A is enabled:
+</p>
+<ul class="itemize mark-bullet">
+<li><code class="code">/Metadata</code> &mdash; the document catalog gets an uncompressed
+XMP packet with <code class="code">pdfaid:part</code>/<code class="code">pdfaid:conformance</code> and the
+dublin-core properties (title, creator, subject, keywords), mirroring
+the Info dictionary byte for byte as ISO 19005-2 6.6.2 requires.
+</li><li><code class="code">/OutputIntents</code> &mdash; a <code class="code">GTS_PDFA1</code> OutputIntent with
+an embedded ICC profile as <code class="code">/DestOutputProfile</code>, so DeviceRGB and
+DeviceGray colors are valid.  The profile is generated in pure Elisp:
+a minimal, deterministic ICC v2 matrix/TRC profile (sRGB primaries,
+gamma 2.2 TRCs, D50 media white point; about 600 bytes).  It is a
+structurally valid ICC profile &mdash; verified against lcms2 &mdash; but it
+describes a gamma-2.2 approximation of sRGB rather than the exact
+sRGB parametric curve.
+</li><li><code class="code">/ID</code> &mdash; the trailer carries an MD5-based /ID array (also
+written for plain documents; harmless and useful).
+</li><li>Link annotations get the Print flag (<code class="code">/F 4</code>, ISO 19005-2
+6.8).
+</li><li>Fonts &mdash; every font must be embedded (ISO 19005 forbids
+unembedded fonts, without exception for Symbol/ZapfDingbats).  The
+base-14 names are therefore rejected unless
+<code class="code">niori-pdf-pdfa-base14-substitutions</code> maps them to a font file;
+<code class="code">.ttf</code>/<code class="code">.otf</code>/<code class="code">.ttc</code>/<code class="code">.pfb</code>/<code class="code">.pfa</code> fonts
+embed as usual.
+</li><li>Color &mdash; DeviceCMYK is rejected (the built-in OutputIntent is
+sRGB); use RGB or grayscale.
+</li></ul>
+
+<dl class="first-defvr first-defopt-alias-first-defvr def-block">
+<dt class="defvr defopt-alias-defvr def-line" id="index-niori_002dpdf_002dpdfa_002dbase14_002dsubstitutions"><span class="category-def">User Option: </span><span><strong class="def-name">niori-pdf-pdfa-base14-substitutions</strong><a class="copiable-link" href="#index-niori_002dpdf_002dpdfa_002dbase14_002dsubstitutions"> &para;</a></span></dt>
+<dd><p>Alist mapping base-14 font names to embedded font specs used in PDF/A
+documents, e.g.:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(setq niori-pdf-pdfa-base14-substitutions
+      '((&quot;Helvetica&quot; . &quot;/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf&quot;)
+        (&quot;Helvetica-Bold&quot;
+         . &quot;/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf&quot;)
+        (&quot;Symbol&quot; . &quot;/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf&quot;)))
+</pre></div>
+
+<p>The replacement can be any font spec accepted by
+<code class="code">niori-pdf-set-font</code>.  Since Symbol/ZapfDingbats text is drawn
+from Unicode strings through the font&rsquo;s own encoding map, mapping them
+to a TrueType font with the right codepoints (DejaVu Sans covers the dingbats and Greek used in the examples) preserves the glyph
+appearance without the unembedded base-14 fonts.
+</p></dd></dl>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Customization.html" rel="next">Customization</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Glyph-Outlines.html" rel="prev">Glyph Outlines</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

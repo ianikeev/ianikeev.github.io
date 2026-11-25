@@ -1,0 +1,50 @@
+---
+title: "Barcodes"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Barcodes.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Barcodes">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="QRCode.html" rel="next">QR codes</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="AcroForms.html" rel="prev">AcroForms (Interactive Forms)</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Barcodes-and-QR-codes"><span>12 Barcodes and QR codes<a class="copiable-link" href="#Barcodes-and-QR-codes"> &para;</a></span></h2>
+
+<p><code class="code">niori-pdf-barcodes.el</code> ports cl-pdf&rsquo;s <samp class="file">bar-codes.lisp</samp>
+(Code 128 by Lars Rustemeier) and adds Code 39 and EAN-13, plus the
+module-matrix drawer shared with the QR encoder
+(<code class="code">niori-pdf-qrcode.el</code>).  All barcodes are drawn with path
+primitives, so no fonts are embedded for the bars themselves.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dbarcode_002dcode128"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-barcode-code128</strong> <var class="def-var-arguments">string x y &amp;key height width font font-size start-stop-factor show-string color</var><a class="copiable-link" href="#index-niori_002dpdf_002dbarcode_002dcode128"> &para;</a></span></dt>
+<dd><p>Code 128 with automatic charset selection (C for even-length
+all-digit strings, B otherwise).  The bars rise upward from the
+baseline <var class="var">y</var>; the human readable text is drawn below it.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dbarcode_002dcode39"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-barcode-code39</strong> <var class="def-var-arguments">string x y &amp;key height width narrow show-text font font-size color</var><a class="copiable-link" href="#index-niori_002dpdf_002dbarcode_002dcode39"> &para;</a></span></dt>
+<dd><p>Code 3 of 9 (<code class="code">0-9 A-Z - . space $ / + %</code>).
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dbarcode_002dean13"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-barcode-ean13</strong> <var class="def-var-arguments">string x y &amp;key height width font font-size color</var><a class="copiable-link" href="#index-niori_002dpdf_002dbarcode_002dean13"> &para;</a></span></dt>
+<dd><p>EAN-13; accepts 12 or 13 digits (the check digit is computed for 12).
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dbarcode_002dqr"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-barcode-qr</strong> <var class="def-var-arguments">matrix x y &amp;key point-size color</var><a class="copiable-link" href="#index-niori_002dpdf_002dbarcode_002dqr"> &para;</a></span></dt>
+<dd><p>Draw a module <var class="var">matrix</var> (list of lists of 0/1) as filled squares,
+row 0 at the anchor with the y axis running downward (the port of
+cl-pdf&rsquo;s <code class="code">draw-qr-code</code>).
+</p></dd></dl>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="QRCode.html" rel="next">QR codes</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="AcroForms.html" rel="prev">AcroForms (Interactive Forms)</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

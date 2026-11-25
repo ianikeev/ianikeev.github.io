@@ -1,0 +1,36 @@
+---
+title: "Charts"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Charts.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Charts">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Glyph-Outlines.html" rel="next">Glyph Outlines</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="QRCode.html" rel="prev">QR codes</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Charts-1"><span>14 Charts<a class="copiable-link" href="#Charts-1"> &para;</a></span></h2>
+
+<p><code class="code">niori-pdf-charts.el</code> ports the chart helpers of cl-pdf&rsquo;s
+<samp class="file">chart.lisp</samp>: pie charts and axis bar charts drawn as vector
+paths with legend and value labels.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dpie_002dchart"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-pie-chart</strong> <var class="def-var-arguments">data x y radius &amp;rest keys</var><a class="copiable-link" href="#index-niori_002dpdf_002dpie_002dchart"> &para;</a></span></dt>
+<dd><p><var class="var">data</var> is a list of <code class="code">(LABEL VALUE COLOR)</code>; keys:
+<code class="code">:title :show-values :label-font :label-size</code>.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dbar_002dchart"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-bar-chart</strong> <var class="def-var-arguments">data x y width height &amp;rest keys</var><a class="copiable-link" href="#index-niori_002dpdf_002dbar_002dchart"> &para;</a></span></dt>
+<dd><p><var class="var">data</var> as above; keys: <code class="code">:title :y-axis-labels :grid-color
+:bar-gap :show-values :label-font :label-size</code>.
+</p></dd></dl>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Glyph-Outlines.html" rel="next">Glyph Outlines</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="QRCode.html" rel="prev">QR codes</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

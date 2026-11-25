@@ -1,0 +1,43 @@
+---
+title: "Documents"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Documents.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Documents">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Text-and-Fonts.html#Text-and-Fonts" rel="next">Text and Fonts</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Compression.html" rel="prev">Compression and zlib</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Documents-and-pages"><span>5 Documents and pages<a class="copiable-link" href="#Documents-and-pages"> &para;</a></span></h2>
+
+<dl class="first-deffn first-defmac-alias-first-deffn def-block">
+<dt class="deffn defmac-alias-deffn def-line" id="index-niori_002dpdf_002dwith_002ddocument"><span class="category-def">Macro: </span><span><strong class="def-name">niori-pdf-with-document</strong> <var class="def-var-arguments">(props) body&hellip;</var><a class="copiable-link" href="#index-niori_002dpdf_002dwith_002ddocument"> &para;</a></span></dt>
+<dd><p>Create a document context and run <var class="var">body</var> inside it.  <var class="var">props</var>
+is a literal plist; supported keys: <code class="code">:title :author :subject
+:keywords :creator :producer :page-width :page-height :compression</code>.
+The document is the value of the variable <code class="code">niori-pdf--doc</code> during
+<var class="var">body</var> and the value of the whole form.
+</p></dd></dl>
+
+<dl class="first-deffn first-defmac-alias-first-deffn def-block">
+<dt class="deffn defmac-alias-deffn def-line" id="index-niori_002dpdf_002dwith_002dpage"><span class="category-def">Macro: </span><span><strong class="def-name">niori-pdf-with-page</strong> <var class="def-var-arguments">(props) body&hellip;</var><a class="copiable-link" href="#index-niori_002dpdf_002dwith_002dpage"> &para;</a></span></dt>
+<dd><p>Create a page in the current document.  <var class="var">props</var>: <code class="code">:width
+:height</code> (points).  All drawing forms inside operate on this page.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dsave"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-save</strong> <var class="def-var-arguments">doc file</var><a class="copiable-link" href="#index-niori_002dpdf_002dsave"> &para;</a></span></dt>
+<dd><p>Write a finished <var class="var">doc</var>ument to <var class="var">file</var> (classic xref table,
+trailer with catalog and info dictionary).  Producer and creation date
+are filled in automatically; info strings are written as UTF-16BE so
+any Unicode title works.
+</p></dd></dl>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Text-and-Fonts.html#Text-and-Fonts" rel="next">Text and Fonts</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Compression.html" rel="prev">Compression and zlib</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

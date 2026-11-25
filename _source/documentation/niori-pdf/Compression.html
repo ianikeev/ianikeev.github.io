@@ -1,0 +1,73 @@
+---
+title: "Compression"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Compression.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Compression">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Documents.html" rel="next">Documents and pages</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Quick-Start.html#Quick-Start" rel="prev">Quick Start</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Compression-and-zlib"><span>4 Compression and zlib<a class="copiable-link" href="#Compression-and-zlib"> &para;</a></span></h2>
+
+<p>This is the one area where Elisp needs an explanation, because GNU
+Emacs bundles zlib <em class="emph">for decompression only</em>: the API provides
+<code class="code">zlib-available-p</code> and <code class="code">niori-pdf-inflate</code>/
+<code class="code">zlib-decompress-region</code>, but there is no built-in compression
+primitive (there is no <code class="code">zlib-insert</code>).
+</p>
+<p>niori-pdf solves this in pure Elisp.  <code class="code">niori-pdf-deflate</code>
+implements DEFLATE (RFC 1951) with fixed Huffman codes and an LZ77
+hash-chain matcher and wraps the result in an RFC 1950 zlib container
+with an Adler-32 checksum.  The output is an ordinary
+<code class="code">/FlateDecode</code> stream that every PDF viewer understands.  The test
+suite inflates it back with Emacs&rsquo;s own zlib as a round-trip check.
+</p>
+<dl class="first-defvr first-defopt-alias-first-defvr def-block">
+<dt class="defvr defopt-alias-defvr def-line" id="index-niori_002dpdf_002dcompression"><span class="category-def">User Option: </span><span><strong class="def-name">niori-pdf-compression</strong><a class="copiable-link" href="#index-niori_002dpdf_002dcompression"> &para;</a></span></dt>
+<dd><p>Stream compression strategy, one of:
+</p>
+<dl class="table">
+<dt><code class="code">deflate</code></dt>
+<dd><p>The pure Elisp implementation (default).  Always available, no external
+dependencies, adequate compression for content streams and CMaps.
+</p></dd>
+<dt><code class="code">raw</code></dt>
+<dd><p>Write streams uncompressed.  Useful for debugging.
+</p></dd>
+<dt><code class="code">gzip</code></dt>
+<dd><p>Use the external program <code class="code">niori-pdf-gzip-program</code> (default
+<code class="code">&quot;gzip&quot;</code>).  Its gzip container is stripped to the raw DEFLATE
+payload, which is a valid <code class="code">FlateDecode</code> stream.  Falls back to
+<code class="code">deflate</code> when the binary is missing.  This option breaks the
+standalone-Emacs guarantee and is only worthwhile for very large
+documents.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl class="first-defvr first-defopt-alias-first-defvr def-block">
+<dt class="defvr defopt-alias-defvr def-line" id="index-niori_002dpdf_002ddeflate_002dmin_002dsize"><span class="category-def">User Option: </span><span><strong class="def-name">niori-pdf-deflate-min-size</strong><a class="copiable-link" href="#index-niori_002dpdf_002ddeflate_002dmin_002dsize"> &para;</a></span></dt>
+<dd><p>Streams shorter than this many bytes (default 100) are written
+uncompressed regardless of the strategy.
+</p></dd></dl>
+
+<dl class="first-defvr first-defopt-alias-first-defvr def-block">
+<dt class="defvr defopt-alias-defvr def-line" id="index-niori_002dpdf_002ddeflate_002dmax_002dchain"><span class="category-def">User Option: </span><span><strong class="def-name">niori-pdf-deflate-max-chain</strong><a class="copiable-link" href="#index-niori_002dpdf_002ddeflate_002dmax_002dchain"> &para;</a></span></dt>
+<dd><p>How many hash-chain candidates the LZ77 matcher examines per position
+(default 16).  Higher values compress slightly better and run slower.
+</p></dd></dl>
+
+<p>Note that Emacs&rsquo;s built-in decompression is still used where it
+matters: PNG IDAT inflation (<code class="code">zlib-decompress-region</code>) and the
+test-suite round trips.  If Emacs was built without zlib, PNG images
+with compressed IDAT raise an explicit error.
+</p>
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Documents.html" rel="next">Documents and pages</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Quick-Start.html#Quick-Start" rel="prev">Quick Start</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

@@ -1,0 +1,50 @@
+---
+title: "Limitations"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Limitations.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Limitations">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Function-Index.html" rel="next">Function Index</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Customization.html" rel="prev">Customization</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Limitations-and-roadmap"><span>18 Limitations and roadmap<a class="copiable-link" href="#Limitations-and-roadmap"> &para;</a></span></h2>
+
+<p>The feature set of the original library that matters for niori.el is
+ported: the object model and writer, pure-Elisp DEFLATE, Base-14 fonts
+with AFM metrics, kerning pairs and Symbol/ZapfDingbats native
+encodings, TrueType subsetting, CFF/OTF embedding with CFF-level
+subsetting, TrueType collections, Type 1 font embedding (.pfb/.pfa
+with eexec/charstring width extraction), JPEG/PNG images,
+the full vector graphics layer, document outlines, AcroForms, bar
+codes, chart helpers, glyph outline drawing, PDF/A-2b archival
+output, and a cl-typesetting style flow engine with Knuth-Plass line
+breaking and TeX-pattern hyphenation.
+</p>
+<p>A complete showcase is <samp class="file">examples/alice-book.el</samp>, which typesets
+Lewis Carroll&rsquo;s <em class="emph">Alice&rsquo;s Adventures in Wonderland</em> as an 86-page
+A5 book with serif body text, sans-serif headings, running heads, a
+linked table of contents and a QR colophon - all from Elisp.
+</p>
+<p>Remaining differences from the Common Lisp originals:
+</p>
+<ul class="itemize mark-bullet">
+<li>Font features beyond cmap/glyf/CharStrings (hinting engines,
+GSUB/GPOS shaping) are not used.
+</li><li>AcroForm JavaScript actions and digital signatures are out of
+scope.
+</li><li>Hyphenation patterns ship for English (American and British),
+German, French, Spanish (one set - the RAE/ASALE orthography is
+common to all Spanish variants), Italian, Portuguese (one set for
+pt-PT and pt-BR), Esperanto, Ukrainian and Russian.  Other languages
+can be added with the same generator.
+</li></ul>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Function-Index.html" rel="next">Function Index</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Customization.html" rel="prev">Customization</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

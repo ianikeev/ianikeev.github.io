@@ -1,0 +1,238 @@
+---
+title: "Flow Engine"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Flow-Engine.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Flow-Engine">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Outlines.html" rel="next">Outlines (Bookmarks)</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Images.html" rel="prev">Images</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="The-Flow-Engine"><span>9 The Flow Engine<a class="copiable-link" href="#The-Flow-Engine"> &para;</a></span></h2>
+
+<p>The flow engine is the Elisp counterpart of cl-typesetting: you declare
+blocks, it wraps lines, breaks pages and keeps headings with their
+content.  All block functions operate on the dynamic flow context
+established by <code class="code">niori-pdf-with-flow-document</code>.
+</p>
+<dl class="first-deffn first-defmac-alias-first-deffn def-block">
+<dt class="deffn defmac-alias-deffn def-line" id="index-niori_002dpdf_002dwith_002dflow_002ddocument"><span class="category-def">Macro: </span><span><strong class="def-name">niori-pdf-with-flow-document</strong> <var class="def-var-arguments">(props) body&hellip;</var><a class="copiable-link" href="#index-niori_002dpdf_002dwith_002dflow_002ddocument"> &para;</a></span></dt>
+<dd><p>Establish a flow context.  <var class="var">props</var>: <code class="code">:width :height :margins</code>
+(list <code class="code">(left top right bottom)</code>, default <code class="code">(54 56 54 56)</code>)
+<code class="code">:header-fn :footer-fn</code> (functions of <code class="code">(flow page-number)</code>)
+<code class="code">:default-font :default-size</code> <code class="code">:language :hyphenate :vjustify</code>
+<code class="code">:pdfa</code> (enable PDF/A-2b archival output, see <a class="pxref" href="PDF_002fA.html">PDF/A-2b archival output</a>) and the
+document info keys.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dgenerate"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-generate</strong> <var class="def-var-arguments">builder</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dgenerate"> &para;</a></span></dt>
+<dd><p>Run <var class="var">builder</var> (a thunk that calls the block functions) and return
+the document.  The builder is re-run until the layout is stable: the
+table-of-contents entries, the reference points recorded with
+<code class="code">niori-pdf-flow-mark-ref-point</code> and the per-page footnote block
+heights must stop changing between passes (at most six passes), so
+the TOC, every cross-reference and the footnotes show correct
+results.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dsave"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-save</strong> <var class="def-var-arguments">doc file</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dsave"> &para;</a></span></dt>
+<dd><p>Write the document (same as <code class="code">niori-pdf-save</code>).
+</p></dd></dl>
+
+<h4 class="subheading" id="Blocks"><span>Blocks<a class="copiable-link" href="#Blocks"> &para;</a></span></h4>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dparagraph"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-paragraph</strong> <var class="def-var-arguments">content &amp;rest keys</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dparagraph"> &para;</a></span></dt>
+<dd><p><var class="var">content</var> is a string or a list of runs; a run is a string or a
+<code class="code">(TEXT &amp;key font size color superscript subscript underline
+strike background)</code> form.  <code class="code">:superscript</code>/<code class="code">:subscript</code> set
+the run at 66% of the base size with the appropriate baseline
+offset, <code class="code">:underline</code> and <code class="code">:strike</code> draw rules under and
+through the run, and <code class="code">:background</code> fills an RGB rectangle
+behind it.  Paragraph keys: <code class="code">:align
+left|center|right|justified</code>, <code class="code">:font :size :leading :color
+:indent :space-before :space-after</code>.  Paragraphs are broken with the Knuth-Plass algorithm over the
+box/glue/penalty model (three TeX-style passes with pretolerance,
+tolerance and emergency stretch); lines are set with TJ
+adjustments.  With <code class="code">:align justified</code> the last line keeps its
+alignment.  Hyphenation uses TeX patterns via <code class="code">:hyphenate</code>
+(default t) and <code class="code">:language</code> (<code class="code">american british german
+french spanish italian portuguese esperanto ukrainian russian</code>; the
+Portuguese set covers both European and Brazilian Portuguese).  Words
+that contain an explicit hyphen (compound
+identifiers such as <code class="code">niori-pdf-curve-to</code>) follow the TeX rule:
+pattern hyphenation is disabled for them and the break opportunities
+sit after their existing hyphens, with no second hyphen glyph at the
+line end.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dheading"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-heading</strong> <var class="def-var-arguments">text &amp;key level font size color space-before space-after toc</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dheading"> &para;</a></span></dt>
+<dd><p>Styled heading (levels 1..4 with default styles).  Headings reserve
+space for the following block (keep-with-next) and, unless <code class="code">toc</code>
+is nil, record an entry for the table of contents.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dtable"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-table</strong> <var class="def-var-arguments">spec</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dtable"> &para;</a></span></dt>
+<dd><p>Grid table.  <var class="var">spec</var> keys: <code class="code">:cols</code> (widths or <code class="code">:auto</code>),
+<code class="code">:header</code>, <code class="code">:rows</code>, <code class="code">:padding</code>, <code class="code">:header-bg
+:header-fg</code>, <code class="code">:borders</code> (RGB list or nil), <code class="code">:font :size
+:align</code>.  A cell is a string or a plist <code class="code">(:text :font :size
+:color :align :background :colspan :rowspan :valign)</code>: <code class="code">:colspan</code>
+and <code class="code">:rowspan</code> span the grid (<code class="code">:valign</code> is
+<code class="code">top</code>, <code class="code">center</code> or <code class="code">bottom</code> inside the spanned
+rectangle).  A row is a list of cells &mdash; or a plist <code class="code">(:cells
+:keep-with-next :background)</code>: <code class="code">:keep-with-next</code> moves the row
+to the next page together with its successor and <code class="code">:background</code>
+fills the whole row.  Cell text wraps; row heights are computed from
+the wrapped cells (a rowspan cell contributes to the sum of its
+covered rows); tables split across pages, repeat the header row, and
+never break inside a span.  Columns whose minimum word width exceeds
+their width are widened, funded by the surplus columns.
+<code class="code">:space-after</code> adds vertical space between the closing rule and
+the next block (default 0).
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dimage"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-image</strong> <var class="def-var-arguments">path &amp;key width max-height align caption</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dimage"> &para;</a></span></dt>
+<dd><p>Image block, scaled to <var class="var">width</var> (fitting <var class="var">max-height</var>), with an
+optional centered caption.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dbox"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-box</strong> <var class="def-var-arguments">builder &amp;key background border padding width align</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dbox"> &para;</a></span></dt>
+<dd><p>Draw a box around the blocks produced by <var class="var">builder</var>; useful for KPI
+cards and callouts.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dcolumns"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-columns</strong> <var class="def-var-arguments">builders &amp;key widths gap row-height</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dcolumns"> &para;</a></span></dt>
+<dd><p>Lay out several builders side by side (KPI rows); the row is as tall as
+the tallest column.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002drule"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-rule</strong> <var class="def-var-arguments">&amp;key thickness color indent space-before space-after</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002drule"> &para;</a></span></dt>
+<dd><p>Horizontal rule.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dspacer"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-spacer</strong> <var class="def-var-arguments">h</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dspacer"> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn def-line" id="index-niori_002dpdf_002dflow_002dvglue"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-vglue</strong> <var class="def-var-arguments">&amp;optional stretch</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dvglue"> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn def-line" id="index-niori_002dpdf_002dflow_002dvfill"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-vfill</strong><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dvfill"> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn def-line" id="index-niori_002dpdf_002dflow_002dpage_002dbreak"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-page-break</strong><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dpage_002dbreak"> &para;</a></span></dt>
+<dd><p>Fixed vertical space; stretchable vertical glue (like TeX&rsquo;s
+<code class="code">\vskip</code> with <var class="var">stretch</var> units of stretch); infinitely
+stretchable glue (<code class="code">\vfill</code>); forced page break.  When a page
+ends, the leftover space above the bottom margin is distributed over
+its vertical glues proportionally to their stretch &mdash; blocks after a
+glue are shifted down with a PDF <code class="code">cm</code> transform, so text, rules
+and images all move together.  Give the document <code class="code">:vjustify t</code>
+to treat every block boundary as a weak glue (vertical
+justification), as in cl-typesetting&rsquo;s filled vboxes.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002ditemize"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-itemize</strong> <var class="def-var-arguments">items &amp;key bullet bullet-color indent gap font size color align space-between space-before space-after hyphenate language</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002ditemize"> &para;</a></span></dt>
+<dd><p>Bulleted list.  <var class="var">items</var> are strings or run lists; each item is a
+paragraph with a hanging indent and the <var class="var">bullet</var> drawn left of
+its first line.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002denumerate"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-enumerate</strong> <var class="def-var-arguments">items &amp;key start format marker-color indent gap font size color align space-between space-before space-after hyphenate language</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002denumerate"> &para;</a></span></dt>
+<dd><p>Numbered list; markers are formatted with <var class="var">format</var> (default
+<code class="code">&quot;%d.&quot;</code>) from <var class="var">start</var> (default 1) and right-aligned in a
+common column.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dfloat"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-float</strong> <var class="def-var-arguments">builder &amp;key width side gap</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dfloat"> &para;</a></span></dt>
+<dd><p>Float the blocks produced by <var class="var">builder</var> (a thunk) to <var class="var">side</var>
+(<code class="code">left</code>, default, or <code class="code">right</code>), <var class="var">width</var> points wide.
+Paragraphs and rules on the same page wrap around the float; the
+flow cursor stays at the float&rsquo;s top, so content fills the space
+beside it.  Floats do not survive a page break.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dtoc"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-toc</strong><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dtoc"> &para;</a></span></dt>
+<dd><p>Table of contents.  Place it early in the document (typically after a
+title block, before a <code class="code">niori-pdf-flow-page-break</code>).  Entries are
+collected from the headings; <code class="code">niori-pdf-flow-generate</code> re-runs the
+builder so page numbers are correct.
+</p></dd></dl>
+
+<h4 class="subheading" id="Reference-points-_0028cross-references_0029"><span>Reference points (cross references)<a class="copiable-link" href="#Reference-points-_0028cross-references_0029"> &para;</a></span></h4>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dmark_002dref_002dpoint"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-mark-ref-point</strong> <var class="def-var-arguments">id &amp;optional data</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dmark_002dref_002dpoint"> &para;</a></span></dt>
+<dd><p>Record a reference point <var class="var">id</var> at the current position (with
+arbitrary <var class="var">data</var>).  Collected across the multi-pass layout.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dref_002dpage_002dnumber"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-ref-page-number</strong> <var class="def-var-arguments">id &amp;optional default</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dref_002dpage_002dnumber"> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn def-line" id="index-niori_002dpdf_002dflow_002dref_002ddata"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-ref-data</strong> <var class="def-var-arguments">id</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dref_002ddata"> &para;</a></span></dt>
+<dt class="deffnx defunx-alias-deffnx def-cmd-deffn def-line" id="index-niori_002dpdf_002dflow_002dref"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-ref</strong> <var class="def-var-arguments">id</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dref"> &para;</a></span></dt>
+<dd><p>Page number / data / whole entry of reference point <var class="var">id</var> from
+the previous pass (nil on the first pass) &mdash; use them inside your
+own content to print &ldquo;see chapter N&rdquo;.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dput_002dref_002dpage_002dnumber"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-put-ref-page-number</strong> <var class="def-var-arguments">id &amp;key font size color align unresolved</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dput_002dref_002dpage_002dnumber"> &para;</a></span></dt>
+<dd><p>Typeset the page number of <var class="var">id</var>, right-aligned by default; on
+the first pass <var class="var">unresolved</var> (an em dash) is printed instead and
+the multi-pass loop re-runs the builder until the real number
+appears.
+</p></dd></dl>
+
+<h4 class="subheading" id="Footnotes"><span>Footnotes<a class="copiable-link" href="#Footnotes"> &para;</a></span></h4>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dflow_002dfootnote"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-flow-footnote</strong> <var class="def-var-arguments">text &amp;key marker font size leading color</var><a class="copiable-link" href="#index-niori_002dpdf_002dflow_002dfootnote"> &para;</a></span></dt>
+<dd><p>Register <var class="var">text</var> as a footnote for the current page and return its
+<var class="var">marker</var>.  The note is set in a block at the bottom of the page,
+below a short LaTeX-style separator rule (<code class="code">niori-pdf-flow-footnote-rule-width</code>
+of the text measure; color <code class="code">niori-pdf-flow-footnote-rule-color</code>),
+when the page is flushed.  <var class="var">marker</var> defaults to the note&rsquo;s number
+on the page (&lsquo;<samp class="samp">1</samp>&rsquo;, &lsquo;<samp class="samp">2</samp>&rsquo;, &hellip;); embed it in the citing
+paragraph as a superscript run:
+</p>
+<div class="example">
+<pre class="example-preformatted">(let ((fn (niori-pdf-flow-footnote &quot;Studio notes.&quot;)))
+  (niori-pdf-flow-paragraph
+   (list &quot;Text cites a source&quot; (list fn :superscript t) &quot;.&quot;) ...))
+</pre></div>
+
+<p><var class="var">font</var>, <var class="var">size</var> (default 8), <var class="var">leading</var> (default 1.24) and
+<var class="var">color</var> style the note text.  Pages that carry footnotes are
+shortened by their note block&rsquo;s height on the next layout pass of
+<code class="code">niori-pdf-flow-generate</code>, so the notes always fit between the
+text and the bottom margin.  Register the note adjacent to the
+paragraph that cites it: a note belongs to the page that is current
+when <code class="code">niori-pdf-flow-footnote</code> runs.
+</p></dd></dl>
+
+<h4 class="subheading" id="Page-furniture"><span>Page furniture<a class="copiable-link" href="#Page-furniture"> &para;</a></span></h4>
+
+<p>Two ready-made template functions can be passed as
+<code class="code">:header-fn</code>/<code class="code">:footer-fn</code>:
+<code class="code">niori-pdf-flow-page-footer</code> draws a centered
+&lsquo;<samp class="samp">- <var class="var">n</var> -</samp>&rsquo; page number; <code class="code">niori-pdf-flow-page-header</code> draws
+the document title left and the page number right in the top margin.
+Custom functions receive the flow context and the page number and may
+use the ordinary content-level operators.
+</p>
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Outlines.html" rel="next">Outlines (Bookmarks)</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Images.html" rel="prev">Images</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

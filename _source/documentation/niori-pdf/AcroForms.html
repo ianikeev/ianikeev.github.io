@@ -1,0 +1,67 @@
+---
+title: "AcroForms"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/AcroForms.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="AcroForms">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Barcodes.html" rel="next">Barcodes and QR codes</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Outlines.html" rel="prev">Outlines (Bookmarks)</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="AcroForms-_0028Interactive-Forms_0029"><span>11 AcroForms (Interactive Forms)<a class="copiable-link" href="#AcroForms-_0028Interactive-Forms_0029"> &para;</a></span></h2>
+
+<p><code class="code">niori-pdf-acroforms.el</code> adds interactive form fields (PDF
+32000-1 chapter 12.7).  Call <code class="code">niori-pdf-acroforms-enable</code> once
+inside the document, then create fields with page coordinates (origin
+bottom-left, like <code class="code">niori-pdf-add-link</code>).  Every field gets a
+generated appearance stream, so the form renders correctly even in
+viewers that ignore <code class="code">NeedAppearances</code>.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dacroforms_002denable"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-acroforms-enable</strong> <var class="def-var-arguments">doc &amp;optional need-appearances</var><a class="copiable-link" href="#index-niori_002dpdf_002dacroforms_002denable"> &para;</a></span></dt>
+<dd><p>Enable form collection for <var class="var">doc</var>.  With <var class="var">need-appearances</var> the
+catalog gets <code class="code">/NeedAppearances true</code> (by default niori-pdf
+provides its own appearance streams and omits the flag).
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dacroforms_002dtext_002dfield"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-acroforms-text-field</strong> <var class="def-var-arguments">doc name x y w h &amp;key value font font-size tooltip multiline password read-only align max-len bg bc</var><a class="copiable-link" href="#index-niori_002dpdf_002dacroforms_002dtext_002dfield"> &para;</a></span></dt>
+<dd><p>Text field.  <var class="var">align</var> is 0 (left), 1 (center) or 2 (right).
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dacroforms_002dcheckbox"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-acroforms-checkbox</strong> <var class="def-var-arguments">doc name x y w h &amp;key checked read-only tooltip bg bc mark</var><a class="copiable-link" href="#index-niori_002dpdf_002dacroforms_002dcheckbox"> &para;</a></span></dt>
+<dd><p>Check box with a path-drawn check mark appearance.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dacroforms_002dchoice"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-acroforms-choice</strong> <var class="def-var-arguments">doc name x y w h options &amp;key value editable tooltip read-only bg bc mark</var><a class="copiable-link" href="#index-niori_002dpdf_002dacroforms_002dchoice"> &para;</a></span></dt>
+<dd><p>Dropdown (combo) choice; <var class="var">options</var> is a list of strings.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dacroforms_002dradio_002dgroup"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-acroforms-radio-group</strong> <var class="def-var-arguments">doc name buttons &amp;key value read-only tooltip bg bc mark</var><a class="copiable-link" href="#index-niori_002dpdf_002dacroforms_002dradio_002dgroup"> &para;</a></span></dt>
+<dd><p>Radio group; <var class="var">buttons</var> is a list of <code class="code">(x y size
+export-string)</code> tuples on the current page.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dacroforms_002dpush_002dbutton"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-acroforms-push-button</strong> <var class="def-var-arguments">doc name x y w h &amp;key caption tooltip uri font font-size read-only bg bc fg</var><a class="copiable-link" href="#index-niori_002dpdf_002dacroforms_002dpush_002dbutton"> &para;</a></span></dt>
+<dd><p>Push button; with <var class="var">uri</var> it triggers a URI action.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002dacroforms_002dset_002dvalue"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-acroforms-set-value</strong> <var class="def-var-arguments">doc name value</var><a class="copiable-link" href="#index-niori_002dpdf_002dacroforms_002dset_002dvalue"> &para;</a></span></dt>
+<dd><p>Update a field&rsquo;s value (and appearance) after creation: strings for
+text and choice fields, booleans for check boxes, export strings for
+radio groups.
+</p></dd></dl>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Barcodes.html" rel="next">Barcodes and QR codes</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Outlines.html" rel="prev">Outlines (Bookmarks)</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

@@ -1,0 +1,78 @@
+---
+title: "Quick Start"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Quick-Start.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Quick-Start">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Compression.html" rel="next">Compression and zlib</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Installation.html" rel="prev">Installation</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Quick-Start-1"><span>3 Quick Start<a class="copiable-link" href="#Quick-Start-1"> &para;</a></span></h2>
+
+<div class="example lisp">
+<pre class="lisp-preformatted">(require 'niori-pdf)
+
+(niori-pdf-with-document (:title &quot;Hello&quot;)
+  (niori-pdf-with-page ()
+    (niori-pdf-set-font &quot;Helvetica-Bold&quot; 24)
+    (niori-pdf-draw-text 72 720 &quot;Hello, PDF world&quot;)
+    (niori-pdf-set-font &quot;Helvetica&quot; 12)
+    (niori-pdf-draw-text 72 690 &quot;Pure Emacs Lisp.&quot;))
+  (niori-pdf-save niori-pdf--doc &quot;/tmp/hello.pdf&quot;))
+</pre></div>
+
+<p>Coordinates are PDF points (1/72 inch), origin at the bottom-left of
+the page, y pointing up &mdash; exactly like cl-pdf.  The default page is
+A4 portrait (595.28 x 841.89 pt); pass <code class="code">:width</code>/<code class="code">:height</code> to
+<code class="code">niori-pdf-with-page</code> for anything else.
+</p>
+<p>For reports with automatic layout, jump to <a class="ref" href="Flow-Engine.html">The Flow Engine</a>.
+</p>
+
+<ul class="mini-toc">
+<li><a href="#Quick-Start-Flow">Quick start: the flow engine</a></li>
+</ul>
+<hr>
+<div class="section-level-extent" id="Quick-Start-Flow">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="#Quick-Start" rel="up">Quick Start</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h3 class="section" id="Quick-start_003a-the-flow-engine"><span>3.1 Quick start: the flow engine<a class="copiable-link" href="#Quick-start_003a-the-flow-engine"> &para;</a></span></h3>
+
+<p>The flow engine lays out whole documents for you &mdash; justified
+paragraphs, headings, tables, lists, images &mdash; with automatic page
+breaks, running headers and a table of contents:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(require 'niori-pdf)
+
+(niori-pdf-flow-generate
+ (lambda ()
+   (niori-pdf-with-flow-document
+       (:title &quot;Q4 report&quot; :footer-fn #'niori-pdf-flow-page-footer)
+     (niori-pdf-flow-heading &quot;Q4 report&quot; :level 1)
+     (niori-pdf-flow-paragraph
+      &quot;Justified text with real font metrics, wrapped and paginated
+automatically, hyphenated with TeX patterns.&quot;
+      :align 'justified)
+     (niori-pdf-flow-itemize '(&quot;first point&quot; &quot;second point&quot;))
+     (niori-pdf-flow-table
+      (list :header [&quot;Region&quot; &quot;Revenue&quot;]
+            :rows '((&quot;North&quot; &quot;156&quot;) (&quot;South&quot; &quot;134&quot;))))
+     (niori-pdf-flow-toc)))
+ (niori-pdf-flow-save niori-pdf--doc &quot;/tmp/report.pdf&quot;))
+</pre></div>
+
+<p>When <code class="code">niori-pdf-flow-toc</code> or cross-reference points are used,
+<code class="code">niori-pdf-flow-generate</code> runs the builder a second (at most
+six) time so every page number in the output is correct.
+</p>
+</div>
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Compression.html" rel="next">Compression and zlib</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Installation.html" rel="prev">Installation</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

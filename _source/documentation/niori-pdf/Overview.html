@@ -1,0 +1,53 @@
+---
+title: "Overview"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Overview.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Overview">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Installation.html" rel="next">Installation</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="index.html" rel="prev">niori-pdf</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Overview-1"><span>1 Overview<a class="copiable-link" href="#Overview-1"> &para;</a></span></h2>
+
+<p>niori-pdf generates PDF 1.4 files entirely inside GNU Emacs.  It is a
+port of the core of Marc Battyani&rsquo;s Common Lisp library <a class="uref" href="https://github.com/mbattyani/cl-pdf">cl-pdf</a>, plus a practical subset of
+its layout engine cl-typesetting, adapted to idiomatic Emacs Lisp.
+</p>
+<p>The reason for the port: org-export and <code class="code">latex</code> make Emacs depend
+on a TeX installation.  A standalone Emacs application (such as
+niori.el) cannot require TeX, Ghostscript or a headless browser on the
+user&rsquo;s machine.  niori-pdf writes standard PDF files with nothing but a
+running Emacs; its only dependency is Emacs 27.1 or newer.
+</p>
+<p>The package is split into modules, each corresponding to a layer of the
+original library:
+</p>
+<ul class="itemize mark-bullet">
+<li><samp class="file">niori-pdf-core.el</samp> &mdash; object model, file writer, xref,
+compression (see <a class="pxref" href="Compression.html">Compression and zlib</a>)
+</li><li><samp class="file">niori-pdf-metrics.el</samp> &mdash; generated AFM width tables for the
+base-14 fonts
+</li><li><samp class="file">niori-pdf-fonts.el</samp> &mdash; font registration, WinAnsi encoding,
+text measurement
+</li><li><samp class="file">niori-pdf-ttf.el</samp> &mdash; TrueType/OpenType parsing, subsetting,
+embedding (including TrueType collections)
+</li><li><samp class="file">niori-pdf-type1.el</samp> &mdash; Type 1 font (.pfb/.pfa) parsing and
+embedding
+</li><li><samp class="file">niori-pdf-content.el</samp> &mdash; text and vector graphics operators
+(the pdf-base/text/pdf-geom equivalents)
+</li><li><samp class="file">niori-pdf-images.el</samp> &mdash; JPEG and PNG XObjects
+</li><li><samp class="file">niori-pdf-flow.el</samp> &mdash; the typesetting engine
+(see <a class="pxref" href="Flow-Engine.html">The Flow Engine</a>)
+</li><li><samp class="file">niori-pdf-pdfa.el</samp> &mdash; PDF/A-2b archival output
+(see <a class="pxref" href="PDF_002fA.html">PDF/A-2b archival output</a>)
+</li></ul>
+
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Installation.html" rel="next">Installation</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="index.html" rel="prev">niori-pdf</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

@@ -1,0 +1,40 @@
+---
+title: "Installation"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Installation.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Installation">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Quick-Start.html#Quick-Start" rel="next">Quick Start</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Overview.html" rel="prev">Overview</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Installation-1"><span>2 Installation<a class="copiable-link" href="#Installation-1"> &para;</a></span></h2>
+
+<p>The package is built for MELPA; until published, install from a
+checkout by adding the directory to <code class="code">load-path</code> and requiring
+<code class="code">niori-pdf</code>.  The MELPA recipe is:
+</p>
+<div class="example lisp">
+<pre class="lisp-preformatted">(niori-pdf :fetcher github :repo &quot;YOUR-NAME/niori-pdf&quot;)
+</pre></div>
+
+<p>Running <code class="code">make</code> byte-compiles the library and builds this manual:
+</p>
+<div class="example">
+<pre class="example-preformatted">make            <span class="r">compile + docs/niori-pdf.info</span>
+make test       <span class="r">run the ERT suite</span>
+make dist       <span class="r">release tarball</span>
+</pre></div>
+
+<p>The <code class="code">info</code> target needs <code class="command">makeinfo</code> (the Debian/Ubuntu
+package is <code class="code">texinfo</code>); the <code class="code">compile</code> and <code class="code">test</code> targets
+need only Emacs.
+</p>
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="Quick-Start.html#Quick-Start" rel="next">Quick Start</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Overview.html" rel="prev">Overview</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>

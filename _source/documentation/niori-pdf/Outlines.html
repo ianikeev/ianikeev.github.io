@@ -1,0 +1,46 @@
+---
+title: "Outlines"
+description: Documentation for niori-pdf, PDF generation in pure Emacs Lisp.
+layout: base.html
+permalink: /documentation/niori-pdf/Outlines.html
+---
+
+<main class="grid">
+    <article class="line-length-lg texinfo-manual">
+<div class="chapter-level-extent" id="Outlines">
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="AcroForms.html" rel="next">AcroForms (Interactive Forms)</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Flow-Engine.html" rel="prev">The Flow Engine</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+<h2 class="chapter" id="Outlines-_0028Bookmarks_0029"><span>10 Outlines (Bookmarks)<a class="copiable-link" href="#Outlines-_0028Bookmarks_0029"> &para;</a></span></h2>
+
+<p><code class="code">niori-pdf-outlines.el</code> builds the PDF outline tree (the bookmark
+panel).  Flow headings record outline entries automatically; for raw
+documents add entries with <code class="code">niori-pdf-outlines-add</code>.
+</p>
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002doutlines_002dadd"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-outlines-add</strong> <var class="def-var-arguments">doc title page &amp;key level y</var><a class="copiable-link" href="#index-niori_002dpdf_002doutlines_002dadd"> &para;</a></span></dt>
+<dd><p>Add an outline entry <var class="var">title</var> pointing to <var class="var">page</var> (1-based) of
+<var class="var">doc</var>.  <var class="var">level</var> (default 1) nests under the previous entry of
+the nearest shallower level; <var class="var">y</var> is the vertical destination in PDF
+coordinates (nil = page top).
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002doutlines_002dcount"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-outlines-count</strong> <var class="def-var-arguments">doc</var><a class="copiable-link" href="#index-niori_002dpdf_002doutlines_002dcount"> &para;</a></span></dt>
+<dd><p>Number of accumulated entries.
+</p></dd></dl>
+
+<dl class="first-deffn first-defun-alias-first-deffn def-block">
+<dt class="deffn defun-alias-deffn def-line" id="index-niori_002dpdf_002doutlines_002dclear"><span class="category-def">Function: </span><span><strong class="def-name">niori-pdf-outlines-clear</strong> <var class="def-var-arguments">doc</var><a class="copiable-link" href="#index-niori_002dpdf_002doutlines_002dclear"> &para;</a></span></dt>
+<dd><p>Forget all entries of <var class="var">doc</var>.
+</p></dd></dl>
+
+<p>The tree is written during <code class="code">niori-pdf-save</code>; the catalog receives
+<code class="code">/Outlines</code> and <code class="code">/PageMode /UseOutlines</code>.  A document with
+outline entries only (no flow TOC) works fine as well.
+</p>
+</div>
+<hr>
+<p class="nav-panel">
+<span class="nav-button"><span class="nav-label">Next: </span><span class="nav-link"><a href="AcroForms.html" rel="next">AcroForms (Interactive Forms)</a></span></span>, <span class="nav-button"><span class="nav-label">Previous: </span><span class="nav-link"><a href="Flow-Engine.html" rel="prev">The Flow Engine</a></span></span>, <span class="nav-button"><span class="nav-label">Up: </span><span class="nav-link"><a href="index.html" rel="up">niori-pdf</a></span></span><span class="nav-button"> &nbsp; </span><span class="nav-button">[<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>]</span><span class="nav-button">[<a href="Variable-Index.html" title="Index" rel="index">Index</a>]</span></p>
+    </article>
+</main>
