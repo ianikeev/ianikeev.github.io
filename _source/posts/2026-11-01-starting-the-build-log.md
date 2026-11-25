@@ -19,9 +19,8 @@ somewhere I can be held to them later. Writing in public also means I can't
 quietly revise my reasoning six months from now and pretend it was always the
 plan.
 
-There is nothing to download yet. No waitlist, no sign-up. The [What I'm
-building](/building/) page says where the project is; this blog says how it's
-going.
+There is nothing to download yet. No waitlist, no sign-up. The [Software](/software/)
+page says where the projects are; this blog says how it's going.
 
 ## What to expect here
 

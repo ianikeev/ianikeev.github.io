@@ -16,8 +16,8 @@ The blog is mostly a build log, with room for the other things that interest
 me: software, medicine, privacy, and the occasional story. Some of what I write
 will be technical, most of it will not need to be.
 
-If you want to follow along, start with the [latest posts](/blog/), or read
-[what I'm building](/building/) and why.
+If you want to follow along, start with the [latest posts](/blog/), or read about
+[the software projects](/software/).
 
 ## Credits & Acknowledgements
 

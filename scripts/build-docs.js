@@ -5,6 +5,7 @@ import {
 	mkdirSync,
 	readFileSync,
 	readdirSync,
+	rmSync,
 	writeFileSync,
 } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -19,6 +20,10 @@ const source = join(docs, 'niori.texi');
 const htmlOutput = join(build, 'niori.html');
 const infoOutput = join(build, 'niori.info');
 const pdfOutput = join(build, 'niori.pdf');
+const nioriPdfSource = join(docs, 'niori-pdf.texi');
+const nioriPdfBuild = join(build, 'niori-pdf');
+const nioriPdfHtml = join(nioriPdfBuild, 'html');
+const nioriPdfOutput = join(nioriPdfBuild, 'niori-pdf.pdf');
 
 const pdfScript = join(root, 'scripts', 'texi2styledpdf.sh');
 
@@ -48,9 +53,9 @@ function runMakeinfo(args, format) {
 	}
 }
 
-function runPdfScript() {
-	const result = spawnSync(pdfScript, [source], {
-		cwd: build,
+function runPdfScript(sourceFile, workingDirectory, outputFile, manualName) {
+	const result = spawnSync(pdfScript, [sourceFile], {
+		cwd: workingDirectory,
 		encoding: 'utf8',
 		maxBuffer: 16 * 1024 * 1024,
 	});
@@ -68,12 +73,47 @@ function runPdfScript() {
 	}
 
 	if (result.status !== 0) {
-		throw new Error('Niori PDF generation failed.');
+		throw new Error(`${manualName} PDF generation failed.`);
 	}
 
-	if (!existsSync(pdfOutput)) {
-		throw new Error(`PDF script completed but did not produce ${pdfOutput}`);
+	if (!existsSync(outputFile)) {
+		throw new Error(
+			`PDF script completed but did not produce ${outputFile}`,
+		);
 	}
+}
+
+function buildNioriPdf() {
+        rmSync(nioriPdfHtml, { recursive: true, force: true });
+	mkdirSync(nioriPdfHtml, { recursive: true });
+
+	runMakeinfo(
+		[
+			'--html',
+			'--split=chapter',
+			`--output=${nioriPdfHtml}/`,
+			nioriPdfSource,
+		],
+		'niori-pdf HTML',
+	);
+
+	runPdfScript(
+		nioriPdfSource,
+		nioriPdfBuild,
+		nioriPdfOutput,
+		'niori-pdf',
+	);
+
+	const pdfDestination = join(
+		downloads,
+		'niori-pdf',
+		'niori-pdf-manual.pdf',
+	);
+
+	mkdirSync(dirname(pdfDestination), { recursive: true });
+	copyFileSync(nioriPdfOutput, pdfDestination);
+
+	console.log('Generated niori-pdf HTML and PDF manuals.');
 }
 
 function copyPdfTree(sourceDir, destinationDir) {
@@ -203,7 +243,7 @@ generateOtherDocumentsInclude();
 
 runMakeinfo(['--info', '--no-split', `--output=${infoOutput}`, source], 'Info');
 
-runPdfScript();
+runPdfScript(source, build, pdfOutput, 'Niori');
 
 const nioriDownloads = join(downloads, 'niori');
 mkdirSync(nioriDownloads, { recursive: true });
@@ -217,4 +257,6 @@ copyFileSync(
 
 copyPdfTree(join(docs, 'pdf'), join(downloads, 'pdf'));
 
-console.log('Generated Niori HTML, Info, and PDF manuals.');
+buildNioriPdf();
+
+console.log('Generated Niori and niori-pdf documentation.');

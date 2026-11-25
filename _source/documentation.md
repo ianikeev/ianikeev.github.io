@@ -25,6 +25,15 @@ A concise reference to Niori's key bindings and commands.
 
 [Download the cheat sheet (PDF)](/assets/downloads/documentation/niori/niori-cheat-sheet.pdf)
 
+## niori-pdf
+
+niori-pdf is an Emacs Lisp library for generating PDF documents.
+
+### User manual
+
+- [Read the manual online (HTML)](/documentation/niori-pdf/)
+- [Download the manual (PDF)](/assets/downloads/documentation/niori-pdf/niori-pdf-manual.pdf)
+
 ## Other documents
 
 {% include "other-documents.html" %}

@@ -1,7 +1,7 @@
 ---
 layout: base.html
-title: What I'm building
-permalink: /building/
+title: Software
+permalink: /software/
 ---
 <main class="grid">
 
