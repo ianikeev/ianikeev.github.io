@@ -34,6 +34,18 @@ niori-pdf is an Emacs Lisp library for generating PDF documents.
 - [Read the manual online (HTML)](/documentation/niori-pdf/)
 - [Download the manual (PDF)](/assets/downloads/documentation/niori-pdf/niori-pdf-manual.pdf)
 
+### Examples
+
+The following sample documents demonstrate niori-pdf's document-generation capabilities and different configuration settings.
+
+- **Alice in Wonderland**
+  - [Download PDF](/assets/downloads/documentation/niori-pdf/alice-in-wonderland.pdf)
+  - [Download PDF/A](/assets/downloads/documentation/niori-pdf/alice-in-wonderland-pdfa.pdf)
+
+- **Sample Report**
+  - [Download PDF](/assets/downloads/documentation/niori-pdf/sample-report.pdf)
+  - [Download PDF/A](/assets/downloads/documentation/niori-pdf/sample-report-pdfa.pdf)
+
 ## Other documents
 
 {% include "other-documents.html" %}

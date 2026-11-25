@@ -11,3 +11,11 @@ _source/_includes/niori-manual.html
 
 # Generated documentation downloads
 /_source/assets/downloads/documentation/
+!/_source/assets/downloads/documentation/
+/_source/assets/downloads/documentation/*
+!/_source/assets/downloads/documentation/niori-pdf/
+/_source/assets/downloads/documentation/niori-pdf/*
+!/_source/assets/downloads/documentation/niori-pdf/alice-in-wonderland.pdf
+!/_source/assets/downloads/documentation/niori-pdf/alice-in-wonderland-pdfa.pdf
+!/_source/assets/downloads/documentation/niori-pdf/sample-report.pdf
+!/_source/assets/downloads/documentation/niori-pdf/sample-report-pdfa.pdf
