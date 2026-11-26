@@ -29,6 +29,14 @@ A concise reference to Niori's key bindings and commands.
 
 niori-pdf is an Emacs Lisp library for generating PDF documents.
 
+### Practical user guide
+
+An illustrated, step-by-step guide to creating PDF documents with niori-pdf.
+
+[Read the User Guide](/guides/niori-pdf-user-guide/)
+
+[Download the User Guide (PDF)](/assets/downloads/documentation/niori-pdf/niori-pdf-user-guide.pdf)
+
 ### User manual
 
 - [Read the manual online (HTML)](/documentation/niori-pdf/)
