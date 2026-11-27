@@ -7,11 +7,14 @@
 @setchapternewpage off
 
 @copying
-This manual documents niori-pdf @value{VERSION}, an Emacs Lisp port of
-cl-pdf.
+This manual documents niori-pdf @value{VERSION}, an Emacs Lisp PDF
+library combining original code with portions derived from CL-PDF and
+CL-TYPESETTING.
 
-Copyright @copyright{} 2026 the niori-pdf authors.  BSD 2-clause license
-(the same FreeBSD-style license as cl-pdf); see the LICENSE file.
+Copyright @copyright{} 2026 Igor Anikeev.  The manual is distributed
+under the BSD 2-Clause License.  The software also contains separately
+licensed upstream-derived code and third-party data; see LICENSE and
+THIRD-PARTY-NOTICES.
 @end copying
 
 @iftex
@@ -21,7 +24,7 @@ Copyright @copyright{} 2026 the niori-pdf authors.  BSD 2-clause license
 @title niori-pdf
 @subtitle Generate PDF files in pure Emacs Lisp
 @subtitle Version 0.1.0
-@author the niori-pdf authors
+@author Igor Anikeev
 @page
 @vskip 0pt plus 1filll
 @insertcopying
@@ -103,7 +106,7 @@ checkout by adding the directory to @code{load-path} and requiring
 @code{niori-pdf}.  The MELPA recipe is:
 
 @lisp
-(niori-pdf :fetcher github :repo "YOUR-NAME/niori-pdf")
+(niori-pdf :fetcher github :repo "ianikeev/niori-pdf")
 @end lisp
 
 Running @code{make} byte-compiles the library and builds this manual:
